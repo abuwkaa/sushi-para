@@ -12,7 +12,7 @@
 <style>
 :root{--paper:#F7F1E6;--card:#FFFCF6;--line:#E6D9C2;--ink:#1B1714;--muted:#6A6056;--red:#B8322A;--sakura:#F3C1CC;--gold:#7A5A1E;--wa:#1F8A4C;--serif:'Noto Serif JP',serif;--sans:'Noto Sans JP',system-ui,sans-serif}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:140px}
+html{scroll-behavior:smooth;scroll-padding-top:var(--stick,140px)}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans)}
 a{color:var(--ink);text-decoration:none}a:hover{color:var(--red)}
 img{display:block;max-width:100%}
@@ -67,19 +67,26 @@ header nav{display:flex;flex-wrap:wrap;gap:28px;font-weight:500;font-size:15px}
 .section-head{text-align:center}
 .section-head h2{margin-top:10px;font-weight:700;font-size:clamp(34px,4.4vw,56px)}
 .section-head p{margin:12px 0 0;color:#5E554C}
-.tabs{position:sticky;top:73px;z-index:10;margin-top:36px;padding:12px 0;background:rgba(247,241,230,.94);display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
-.tab{cursor:pointer;min-height:46px;padding:0 22px;border-radius:999px;border:1.5px solid #D8C8AC;background:var(--card);color:var(--ink);font:700 15px var(--sans);display:inline-flex;align-items:center;gap:10px}
+/* Разделы меню: одна липкая строка-лента со ссылками, листается пальцем вбок */
+.tabs{position:sticky;top:var(--hdr,73px);z-index:10;margin:36px -28px 0;padding:10px 28px;background:rgba(247,241,230,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab:first-child{margin-left:auto}.tab:last-child{margin-right:auto}
+.tab{flex:0 0 auto;white-space:nowrap;text-decoration:none;cursor:pointer;min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid #D8C8AC;background:var(--card);color:var(--ink);font:700 15px var(--sans);display:inline-flex;align-items:center;gap:10px}
 .tab .n{font-size:12px;color:#6E6458}
-.tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
-.tab[aria-selected="true"] .n{background:var(--red);color:#fff;border-radius:999px;padding:2px 8px}
-.grid{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px}
+.tab[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.tab[aria-current="true"] .n{background:var(--red);color:#fff;border-radius:999px;padding:2px 8px}
+.cat-title{margin-top:48px;display:flex;align-items:center;gap:14px;font-weight:700;font-size:clamp(24px,3vw,32px)}
+.cat:first-child .cat-title{margin-top:30px}
+.cat-title .n{font:500 14px var(--sans);color:#6E6458}
+.cat-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;transition:transform .4s,box-shadow .4s}
 .card:hover{transform:translateY(-4px);box-shadow:0 22px 40px -26px rgba(27,23,20,.45)}
 .ph{aspect-ratio:4/3;border-radius:12px;background:#F2E9DA;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .ph img{width:100%;height:100%;object-fit:cover}
 .ph svg{width:50%}
 .badge{position:absolute;top:10px;right:10px;background:var(--red);color:#fff;font-weight:700;font-size:13px;border-radius:999px;padding:3px 10px}
-.card h3{font-weight:700;font-size:19px;line-height:1.35}
+.card h4{margin:0;font-family:var(--serif);font-weight:700;font-size:19px;line-height:1.35}
 .card p{margin:0;font-size:13.5px;line-height:1.6;color:var(--muted);flex:1}
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px dashed #E0D2BA}
 .price{font-weight:700;font-size:19px}.price small{font-weight:500;font-size:13px;color:#6E6458}
@@ -89,14 +96,6 @@ header nav{display:flex;flex-wrap:wrap;gap:28px;font-weight:500;font-size:15px}
 .stepper button.plus{background:var(--red);color:#fff}
 .stepper span{min-width:24px;text-align:center;font-weight:700}
 
-/* how */
-#how{background:var(--ink);color:var(--paper)}
-#how .wrap{padding-top:100px;padding-bottom:100px}
-#how .kanji{color:var(--sakura)}
-.steps{margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:40px;text-align:center}
-.steps .num{font:64px/1 var(--serif);color:#E46A5E}
-.steps h3{margin:18px 0 8px;font-size:22px}
-.steps p{margin:0;color:#C7BCAD;line-height:1.7}
 
 /* footer */
 footer .wrap{padding-top:88px;padding-bottom:140px}
@@ -118,7 +117,7 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
 #cart .sum b{display:block;font-size:16px}
 #cart .sum span{font-size:13px;color:#C7BCAD}
 #cart .clear{cursor:pointer;min-height:44px;padding:0 12px;border:none;background:transparent;color:#C7BCAD;font:14px var(--sans)}
-@media (max-width:560px){#cart{border-radius:22px;padding:12px}#cart>svg{margin-left:4px}#cart .wa{flex:1 1 100%;justify-content:center}header nav{display:none}}
+@media (max-width:560px){header{position:static}.tabs{margin-left:-28px;margin-right:-28px}.tab{min-height:42px;padding:0 16px}#cart{border-radius:22px;padding:12px}#cart>svg{margin-left:4px}#cart .wa{flex:1 1 100%;justify-content:center}header nav{display:none}}
 </style>
 </head>
 <body>
@@ -129,7 +128,7 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
 <header>
   <div class="wrap">
     <a href="#top" class="brand"><img src="assets/logo.jpg" alt="">Суши Пара</a>
-    <nav aria-label="Бөлүмдөр" data-i18n-attr="aria-label:nav_aria"><a href="#menu" data-i18n="nav_menu">Меню</a><a href="#how" data-i18n="nav_how">Буйрутма берүү</a><a href="#contacts" data-i18n="nav_contacts">Байланыш</a></nav>
+    <nav aria-label="Бөлүмдөр" data-i18n-attr="aria-label:nav_aria"><a href="#menu" data-i18n="nav_menu">Меню</a><a href="#contacts" data-i18n="nav_contacts">Байланыш</a></nav>
     <div class="hdr-r">
       <div class="lang" role="group" aria-label="Язык / Тил"><button type="button" data-lang="ru" aria-pressed="false">РУС</button><button type="button" data-lang="ky" aria-pressed="true">КЫР</button></div>
       <a href="tel:+996557557085" class="btn">
@@ -159,7 +158,7 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
         <p class="eyebrow" data-i18n="eyebrow">Роллдор · Шаурма · Баткен</p>
         <h1 data-i18n-html="h1">Бөлүшкүңүз<br>келген <span>даам</span></h1>
         <p class="lead" data-i18n="lead">Кол менен жасалган классикалык, меште бышырылган жана ысык роллдор, ширелүү шаурма — буйрутмаңыздан кийин дароо даярдайбыз.</p>
-        <div class="ctas"><a href="#menu" class="btn" data-i18n="cta_menu">Менюну ачуу</a><a href="#how" class="btn ghost" data-i18n="nav_how">Буйрутма берүү</a></div>
+        <div class="ctas"><a href="#menu" class="btn" data-i18n="cta_order">Буйрутма берүү</a><a href="#contacts" class="btn ghost" data-i18n="nav_contacts">Байланыш</a></div>
       </div>
     </div>
     <div class="hero-art">
@@ -180,24 +179,10 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
     <div class="section-head">
       <div class="kanji" aria-hidden="true">お品書き</div>
       <h2>Меню</h2>
-      <p data-i18n="menu_p">Тамактарды тандаңыз — себет сумманы эсептеп, буйрутманы WhatsApp'ка жөнөтөт.</p>
+      <p data-i18n="menu_p">Тамактарды тандаңыз — себет сумманы эсептеп, буйрутманы WhatsApp'ка жөнөтөт. Жеткирип беребиз же өзүңүз алып кетсеңиз болот.</p>
     </div>
-    <div class="tabs" role="tablist" aria-label="Менюнун бөлүмдөрү" data-i18n-attr="aria-label:tabs_aria" id="tabs"></div>
-    <div class="grid" id="grid"></div>
-  </div>
-</section>
-
-<section id="how">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="kanji" aria-hidden="true">ご注文</div>
-      <h2 data-i18n="how_h2">Кантип буйрутма берсе болот</h2>
-    </div>
-    <div class="steps">
-      <div><div class="num" aria-hidden="true">一</div><h3 data-i18n="s1_h">Буйрутмаңызды түзүңүз</h3><p data-i18n="s1_p">«Буйрутмага» баскычын басыңыз — ылдыйда суммасы көрсөтүлгөн себет пайда болот.</p></div>
-      <div><div class="num" aria-hidden="true">二</div><h3 data-i18n="s2_h">WhatsApp'ка жөнөтүңүз</h3><p data-i18n="s2_p">Буйрутма даяр билдирүү түрүндө 0557 55 70 85 номерине жөнөтүлөт.</p></div>
-      <div><div class="num" aria-hidden="true">三</div><h3 data-i18n="s3_h">Ысык бойдон алыңыз</h3><p data-i18n="s3_p">Жеткирип беребиз же Нургазиев көчөсү, 102 дарегинен өзүңүз алып кетсеңиз болот.</p></div>
-    </div>
+    <nav class="tabs" aria-label="Менюнун бөлүмдөрү" data-i18n-attr="aria-label:tabs_aria" id="tabs"></nav>
+    <div id="grid"></div>
   </div>
 </section>
 
@@ -311,16 +296,12 @@ const T = {
   ru: {
     title: 'Суши Пара — роллы и шаурма · Баткен',
     meta: 'Суши Пара: роллы, запечённые и горячие роллы, шаурма. Заказ в WhatsApp 0557 55 70 85. ул. Нургазиева, 102.',
-    nav_aria: 'Разделы', nav_menu: 'Меню', nav_how: 'Как заказать', nav_contacts: 'Контакты',
+    nav_aria: 'Разделы', nav_menu: 'Меню', nav_contacts: 'Контакты',
     eyebrow: 'Роллы · Шаурма · Баткен',
     h1: 'Вкус, которым<br>хочется <span>делиться</span>',
     lead: 'Классические, запечённые и горячие роллы ручной работы, сочная шаурма — готовим сразу после заказа.',
-    cta_menu: 'Открыть меню', logo_alt: 'Логотип Суши Пара',
-    menu_p: 'Выберите блюда — корзина посчитает сумму и отправит заказ в WhatsApp.', tabs_aria: 'Разделы меню',
-    how_h2: 'Как заказать',
-    s1_h: 'Соберите заказ', s1_p: 'Нажимайте «В заказ» — внизу появится корзина с суммой.',
-    s2_h: 'Отправьте в WhatsApp', s2_p: 'Заказ уйдёт готовым сообщением на 0557 55 70 85.',
-    s3_h: 'Получите горячим', s3_p: 'Доставка или самовывоз с Нургазиева, 102.',
+    cta_order: 'Заказать', logo_alt: 'Логотип Суши Пара',
+    menu_p: 'Выберите блюда — корзина посчитает сумму и отправит заказ в WhatsApp. Доставка или самовывоз.', tabs_aria: 'Разделы меню',
     f_phone: 'Телефон', f_wa: 'Написать в WhatsApp', f_addr_l: 'Адрес', f_addr: 'ул. Нургазиева, 102',
     f_hours_l: 'Часы работы', f_hours: 'С 9:00 до 23:00',
     cart_aria: 'Корзина', addr: 'Адрес доставки', addr_ph: 'Адрес доставки: улица, дом, квартира',
@@ -332,16 +313,12 @@ const T = {
   ky: {
     title: 'Суши Пара — роллдор жана шаурма · Баткен',
     meta: 'Суши Пара: классикалык, бышырылган жана ысык роллдор, шаурма. Буйрутма WhatsApp аркылуу: 0557 55 70 85. Нургазиев көч., 102.',
-    nav_aria: 'Бөлүмдөр', nav_menu: 'Меню', nav_how: 'Буйрутма берүү', nav_contacts: 'Байланыш',
+    nav_aria: 'Бөлүмдөр', nav_menu: 'Меню', nav_contacts: 'Байланыш',
     eyebrow: 'Роллдор · Шаурма · Баткен',
     h1: 'Бөлүшкүңүз<br>келген <span>даам</span>',
     lead: 'Кол менен жасалган классикалык, меште бышырылган жана ысык роллдор, ширелүү шаурма — буйрутмаңыздан кийин дароо даярдайбыз.',
-    cta_menu: 'Менюну ачуу', logo_alt: 'Суши Пара логотиби',
-    menu_p: 'Тамактарды тандаңыз — себет сумманы эсептеп, буйрутманы WhatsApp\'ка жөнөтөт.', tabs_aria: 'Менюнун бөлүмдөрү',
-    how_h2: 'Кантип буйрутма берсе болот',
-    s1_h: 'Буйрутмаңызды түзүңүз', s1_p: '«Буйрутмага» баскычын басыңыз — ылдыйда суммасы көрсөтүлгөн себет пайда болот.',
-    s2_h: 'WhatsApp\'ка жөнөтүңүз', s2_p: 'Буйрутма даяр билдирүү түрүндө 0557 55 70 85 номерине жөнөтүлөт.',
-    s3_h: 'Ысык бойдон алыңыз', s3_p: 'Жеткирип беребиз же Нургазиев көчөсү, 102 дарегинен өзүңүз алып кетсеңиз болот.',
+    cta_order: 'Буйрутма берүү', logo_alt: 'Суши Пара логотиби',
+    menu_p: 'Тамактарды тандаңыз — себет сумманы эсептеп, буйрутманы WhatsApp\'ка жөнөтөт. Жеткирип беребиз же өзүңүз алып кетсеңиз болот.', tabs_aria: 'Менюнун бөлүмдөрү',
     f_phone: 'Телефон', f_wa: 'WhatsApp\'ка жазуу', f_addr_l: 'Дарек', f_addr: 'Нургазиев көч., 102',
     f_hours_l: 'Иш убактысы', f_hours: 'Саат 9:00дөн 23:00гө чейин',
     cart_aria: 'Себет', addr: 'Жеткирүү дареги', addr_ph: 'Жеткирүү дареги: көчө, үй, батир',
@@ -417,27 +394,71 @@ function applyLang() {
   document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
 }
 
+// Меню — одна длинная страница: все разделы подряд, лента сверху — ссылки-якоря на разделы
 function renderTabs() {
   document.getElementById('tabs').innerHTML = MENU.map(c =>
-    `<button class="tab" role="tab" aria-selected="${c.id === tab}" data-tab="${c.id}">${t('cats')[c.id]}<span class="n">${c.items.length}</span></button>`).join('');
+    `<a class="tab" href="#cat-${c.id}" data-jump="${c.id}"${c.id === tab ? ' aria-current="true"' : ''}>${t('cats')[c.id]}<span class="n">${c.items.length}</span></a>`).join('');
 }
-function renderGrid() {
-  const cat = MENU.find(c => c.id === tab);
-  document.getElementById('grid').innerHTML = cat.items.map(it => {
-    const q = cart[it.slug] || 0;
-    return `<article class="card">
+const ctlHTML = (it, q) => q
+  ? `<div class="stepper"><button aria-label="${t('dec')}" data-dec="${it.slug}">−</button><span>${q}</span><button class="plus" aria-label="${t('inc')}" data-inc="${it.slug}">+</button></div>`
+  : `<button class="btn add" data-inc="${it.slug}">${t('add')}</button>`;
+function cardHTML(it) {
+  const q = cart[it.slug] || 0;
+  return `<article class="card" data-card="${it.slug}">
       <div class="ph">
         <img src="assets/images/${it.slug}.webp" alt="${nm(it)}" loading="lazy" onerror="this.outerHTML=ART['${it.kind}']">
-        ${q ? `<span class="badge">×${q}</span>` : ''}
+        <span class="badge"${q ? '' : ' hidden'}>×${q}</span>
       </div>
-      <h3>${nm(it)}</h3><p>${ds(it)}</p>
+      <h4>${nm(it)}</h4><p>${ds(it)}</p>
       <div class="row">
         <span class="price">${it.price} <small>сом</small></span>
-        ${q ? `<div class="stepper"><button aria-label="${t('dec')}" data-dec="${it.slug}">−</button><span>${q}</span><button class="plus" aria-label="${t('inc')}" data-inc="${it.slug}">+</button></div>`
-            : `<button class="btn add" data-inc="${it.slug}">${t('add')}</button>`}
+        <div class="ctl">${ctlHTML(it, q)}</div>
       </div></article>`;
-  }).join('');
 }
+function renderGrid() {
+  document.getElementById('grid').innerHTML = MENU.map(c =>
+    `<section class="cat" id="cat-${c.id}" data-cat="${c.id}">
+      <h3 class="cat-title">${t('cats')[c.id]}<span class="n">${c.items.length}</span></h3>
+      <div class="grid">${c.items.map(cardHTML).join('')}</div>
+    </section>`).join('');
+}
+// Обновить одну карточку без перерисовки всего меню (фото не мигают)
+function updateCard(slug) {
+  const el = document.querySelector(`[data-card="${slug}"]`), it = ALL.find(i => i.slug === slug);
+  if (!el || !it) return;
+  const q = cart[slug] || 0, badge = el.querySelector('.badge');
+  if (badge) { badge.hidden = !q; badge.textContent = '×' + q; }
+  el.querySelector('.ctl').innerHTML = ctlHTML(it, q);
+}
+// Высота липких панелей -> CSS-переменные; подсветка текущего раздела в ленте при прокрутке
+function setStick() {
+  const h = document.querySelector('header'), tabsEl = document.getElementById('tabs');
+  const hh = getComputedStyle(h).position === 'sticky' ? h.offsetHeight : 0;
+  document.documentElement.style.setProperty('--hdr', hh + 'px');
+  document.documentElement.style.setProperty('--stick', (hh + tabsEl.offsetHeight + 10) + 'px');
+  return hh + tabsEl.offsetHeight + 10;
+}
+function setActiveTab(id) {
+  if (id === tab && document.querySelector('.tab[aria-current="true"]')) return;
+  tab = id;
+  const strip = document.getElementById('tabs');
+  strip.querySelectorAll('.tab').forEach(a => { if (a.dataset.jump === id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+  const a = strip.querySelector(`[data-jump="${id}"]`);
+  if (a) strip.scrollTo({ left: a.offsetLeft - (strip.clientWidth - a.offsetWidth) / 2, behavior: 'smooth' });
+}
+let spyTimer = 0, spyLast = 0;
+function spyNow() {
+  spyLast = Date.now();
+  const line = setStick() + 24; let cur = MENU[0].id;
+  document.querySelectorAll('.cat').forEach(sec => { if (sec.getBoundingClientRect().top <= line) cur = sec.dataset.cat; });
+  setActiveTab(cur);
+}
+function spy() {
+  clearTimeout(spyTimer);
+  if (Date.now() - spyLast > 90) spyNow(); else spyTimer = setTimeout(spyNow, 100);
+}
+window.addEventListener('scroll', spy, { passive: true });
+window.addEventListener('resize', spy);
 function renderCart() {
   let total = 0, count = 0; const lines = [];
   ALL.forEach(it => { const q = cart[it.slug] || 0; if (q) { total += q * it.price; count += q; lines.push(`• ${nm(it)} × ${q} — ${q * it.price} сом`); } });
@@ -448,13 +469,13 @@ function renderCart() {
   const msg = t('msg')(lines.join('\n'), total, addrEl.value.trim());
   document.getElementById('cart-wa').href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
 }
-function setQty(slug, q) { if (q > 0) cart[slug] = q; else delete cart[slug]; save(); renderGrid(); renderCart(); }
+function setQty(slug, q) { if (q > 0) cart[slug] = q; else delete cart[slug]; save(); updateCard(slug); renderCart(); }
 
 document.addEventListener('click', e => {
-  const b = e.target.closest('[data-tab],[data-inc],[data-dec],[data-lang],#cart-clear');
+  const b = e.target.closest('[data-jump],[data-inc],[data-dec],[data-lang],#cart-clear');
   if (!b) return;
-  if (b.dataset.tab) { tab = b.dataset.tab; renderTabs(); renderGrid(); }
-  else if (b.dataset.lang) { lang = b.dataset.lang; try { localStorage.setItem('sp-lang', lang); } catch (e) {} applyLang(); renderTabs(); renderGrid(); renderCart(); }
+  if (b.dataset.jump) { setActiveTab(b.dataset.jump); }
+  else if (b.dataset.lang) { lang = b.dataset.lang; try { localStorage.setItem('sp-lang', lang); } catch (e) {} applyLang(); renderTabs(); renderGrid(); renderCart(); spy(); }
   else if (b.dataset.inc) setQty(b.dataset.inc, (cart[b.dataset.inc] || 0) + 1);
   else if (b.dataset.dec) setQty(b.dataset.dec, (cart[b.dataset.dec] || 0) - 1);
   else if (b.id === 'cart-clear') { cart = {}; save(); renderGrid(); renderCart(); }
@@ -485,7 +506,8 @@ addrEl.addEventListener('input', () => {
   }
 })();
 
-applyLang(); renderTabs(); renderGrid(); renderCart();
+applyLang(); renderTabs(); renderGrid(); renderCart(); setStick(); spy();
+window.addEventListener('load', spy);
 </script>
 </body>
 </html>
