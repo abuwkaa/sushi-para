@@ -1,0 +1,11 @@
+# Служебные файлы — не публикуются на сайте
+.claude/
+CLAUDE.md
+PROMPT.md
+.DS_Store
+# Фото печатного меню (источник цен) и запасные варианты ветки — сайту не нужны
+assets/menu-photo.jpg
+assets/decor/sakura-branch-a.png
+assets/decor/sakura-branch-b.png
+assets/decor/sakura-branch-c.png
+assets/decor/sakura-branch-d.png

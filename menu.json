@@ -1,0 +1,44 @@
+{
+  "phone": "0557557085",
+  "whatsapp": "996557557085",
+  "address": "ул. Нургазиева, 102",
+  "hours": "9:00–23:00",
+  "deliveryTime": "",
+  "categories": [
+    { "id": "rolls", "label": "Роллы", "items": [
+      { "slug": "philadelphia", "name": "Филадельфия", "desc": "Рис, сыр, лосось", "price": 360 },
+      { "slug": "philadelphia-cucumber", "name": "Филадельфия с огурцом", "desc": "Рис, сыр, огурцы, лосось", "price": 350 },
+      { "slug": "canada", "name": "Канада", "desc": "Рис, сыр, лосось, огурцы, угорь", "price": 470 },
+      { "slug": "california", "name": "Калифорния", "desc": "Рис, краб, огурцы, тобика", "price": 350 },
+      { "slug": "opalenny", "name": "Опалённый", "desc": "Рис, сыр, огурцы, лосось", "price": 360 },
+      { "slug": "caesar-big", "name": "Цезарь BIG", "desc": "Рис, соус цезарь, помидор, огурцы, курица", "price": 360 },
+      { "slug": "hulk", "name": "Халк", "desc": "Рис, сыр, помидор, курица, огурцы", "price": 330 },
+      { "slug": "panda", "name": "Панда", "desc": "Рис, курица, сыр, огурцы, кунжут", "price": 330 },
+      { "slug": "sushi-sandwich", "name": "Суши сэндвич", "desc": "Рис, сыр, помидор, огурцы, курица", "price": 330 },
+      { "slug": "cucumber-maki", "name": "С огурцом", "desc": "Рис, огурцы", "price": 180 }
+    ]},
+    { "id": "baked", "label": "Запечённые", "items": [
+      { "slug": "baked-salmon", "name": "Запечённый лосось", "desc": "Рис, сыр, лосось", "price": 360 },
+      { "slug": "baked-california", "name": "Запечённая Калифорния", "desc": "Рис, сыр, крабовые палочки, огурцы, масаго", "price": 350 },
+      { "slug": "hawaiian-baked", "name": "Гавайская запечённая", "desc": "Рис, сыр, курица, ананас", "price": 350 },
+      { "slug": "caesar-baked", "name": "Цезарь запечённый", "desc": "Рис, соус цезарь, курица, помидор, огурцы, капуста", "price": 340 }
+    ]},
+    { "id": "hot", "label": "Горячие", "items": [
+      { "slug": "hot-furai", "name": "Горячий Фурай", "desc": "Рис, сыр, лосось, угорь", "price": 430 },
+      { "slug": "hot-salmon", "name": "Горячий лосось", "desc": "Рис, сыр, лосось", "price": 360 },
+      { "slug": "hot-chuk", "name": "Горячий чак", "desc": "Рис, сыр", "price": 360 },
+      { "slug": "caesar-hot", "name": "Цезарь горячий", "desc": "Рис, соус цезарь, курица, помидор, капуста", "price": 360 },
+      { "slug": "hot-california", "name": "Горячая Калифорния", "desc": "Рис, сыр, краб, огурцы", "price": 350 },
+      { "slug": "chicken-tempura", "name": "Чиккен темпура", "desc": "Рис, огурцы, курица", "price": 330 }
+    ]},
+    { "id": "shawa", "label": "Шаурма", "items": [
+      { "slug": "shawarma-mini", "name": "Шаурма мини", "desc": "Фирменная, с говядиной", "price": 170 },
+      { "slug": "shawarma-standard", "name": "Шаурма стандарт", "desc": "Фирменная, с говядиной", "price": 220 },
+      { "slug": "shawarma-baked", "name": "Шаурма запечённая", "desc": "Фирменная, с говядиной", "price": 240 },
+      { "slug": "chicken-shawarma-mini", "name": "Куриная шаурма мини", "desc": "С курицей", "price": 200 },
+      { "slug": "chicken-shawarma-standard", "name": "Куриная шаурма стандарт", "desc": "С курицей", "price": 250 },
+      { "slug": "chicken-shawarma-spicy", "name": "Куриная шаурма острая", "desc": "С курицей и халапеньо", "price": 270 },
+      { "slug": "chicken-shawarma-cheese", "name": "Куриная шаурма сырная", "desc": "С курицей и сырным соусом", "price": 270 }
+    ]}
+  ]
+}
