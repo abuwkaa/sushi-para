@@ -21,7 +21,7 @@ h1,h2,h3{margin:0}
 .btn:disabled{opacity:.45;cursor:default}
 .field{display:block;margin:0}
 .field>span{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
-input[type=text],input[type=number],input[type=password],select,textarea{width:100%;min-height:42px;padding:8px 12px;border:1.5px solid #D8C8AC;border-radius:10px;background:#fff}
+input[type=text],input[type=tel],input[type=number],input[type=password],select,textarea{width:100%;min-height:42px;padding:8px 12px;border:1.5px solid #D8C8AC;border-radius:10px;background:#fff}
 textarea{min-height:64px;resize:vertical}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ink)}
 .hint{font-size:12.5px;color:var(--muted)}
@@ -32,6 +32,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ink)}
 #login ol{padding-left:20px;margin:12px 0}
 #login li{margin:6px 0}
 #login code{background:#F2E9DA;padding:1px 6px;border-radius:6px}
+#login .field{margin-top:10px}
+#login details{margin:14px 0 4px;padding:12px 14px;border:1px dashed #D8C8AC;border-radius:12px;background:#FFFDF9}
+#login summary{font-weight:700;cursor:pointer}
 .err{margin-top:10px;color:var(--red);font-weight:700}
 
 /* шапка панели */
@@ -88,13 +91,17 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ink)}
 // ============================================================================================
 // Панель управления сайтом SUSHI PARA.
 // Работает прямо в браузере: читает и сохраняет файл data.js (и фото блюд) в репозитории на GitHub
-// через GitHub API. Для сохранения нужен личный ключ доступа (token) — он хранится только
-// в этом браузере (localStorage) и никуда, кроме api.github.com, не отправляется.
+// через GitHub API. Владелец входит по телефону и паролю: ключ GitHub (token) лежит в репозитории
+// в файле auth.json в зашифрованном виде (AES-GCM, ключ шифра — PBKDF2 от телефона и пароля),
+// расшифровывается прямо в браузере и никуда, кроме api.github.com, не отправляется.
+// Сам пароль нигде не хранится. Ключ GitHub владелец вводит один раз — при первой настройке.
 // ============================================================================================
 const REPO = { owner: 'abuwkaa', repo: 'sushi-para', branch: 'main' };
 // Автор коммитов — служебный адрес GitHub, чтобы личная почта не попадала в публичную историю
 const AUTHOR = { name: 'abuwkaa', email: '173940425+abuwkaa@users.noreply.github.com' };
 const DATA_PATH = 'data.js';
+const AUTH_PATH = 'auth.json';
+const KDF_ITER = 3000000;   // число шагов PBKDF2: замедляет подбор пароля
 const DATA_HEADER = '// Данные сайта: меню, цены и тексты. Этот файл меняет админ-панель (admin.html) — вручную лучше не править.\n';
 // Адрес API можно подменить (?api=…) только при локальной разработке — на живом сайте всегда api.github.com
 const IS_LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
@@ -166,12 +173,59 @@ async function gh(method, path, body) {
   return r.status === 204 ? null : r.json();
 }
 function explain(e) {
-  if (e.status === 401) return 'Ключ доступа не принят: он неверный или срок его действия истёк.';
+  if (e.status === 401) return 'Ключ GitHub не принят: он неверный или срок его действия истёк.';
   if (e.status === 403) return 'У ключа нет права изменять сайт. Нужен доступ к репозиторию sushi-para с правом Contents: Read and write.';
   if (e.status === 404) return 'Репозиторий не найден для этого ключа. Проверьте, что ключ выдан именно на sushi-para.';
   if (e.status === 409 || e.status === 422) return 'GitHub отклонил сохранение (' + e.message + '). Обновите страницу и попробуйте ещё раз.';
   if (!e.status) return 'Нет связи с GitHub. Проверьте интернет и попробуйте ещё раз.';
   return 'Ошибка GitHub: ' + e.message;
+}
+
+// ---------- вход: ключ GitHub, зашифрованный телефоном и паролем ----------
+const normPhone = p => { let d = String(p).replace(/\D/g, ''); if (d.length === 10 && d[0] === '0') d = '996' + d.slice(1); else if (d.length === 9) d = '996' + d; return d; };
+const toB64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const fromB64 = str => Uint8Array.from(atob(str), c => c.charCodeAt(0));
+async function deriveKey(phone, password, salt, iter) {
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(normPhone(phone) + '\n' + password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: iter }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function sealToken(phone, password, tok) {
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, await deriveKey(phone, password, salt, KDF_ITER), new TextEncoder().encode(tok));
+  return { v: 1, kdf: 'PBKDF2-SHA256', iter: KDF_ITER, salt: toB64(salt), iv: toB64(iv), ct: toB64(ct) };
+}
+async function openToken(phone, password, a) {   // бросает ошибку, если телефон или пароль не подошли
+  const key = await deriveKey(phone, password, fromB64(a.salt), a.iter);
+  return new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromB64(a.iv) }, key, fromB64(a.ct)));
+}
+async function loadAuth() {   // null — вход ещё не настроен
+  try {
+    const r = await fetch(`${API}/repos/${REPO.owner}/${REPO.repo}/contents/${AUTH_PATH}?ref=${REPO.branch}`, { cache: 'no-store', headers: { Accept: 'application/vnd.github+json' } });
+    if (r.status === 404) return null;
+    if (r.ok) return JSON.parse(b64ToText((await r.json()).content));
+  } catch (e) {}
+  const r = await fetch(AUTH_PATH + '?v=' + Date.now(), { cache: 'no-store' });   // запасной путь — копия на самом сайте
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error('auth');
+  return r.json();
+}
+async function commitFiles(tree, message, parent) {
+  if (!parent) parent = (await gh('GET', `/git/ref/heads/${REPO.branch}`)).object.sha;
+  const pc = await gh('GET', `/git/commits/${parent}`);
+  const nt = await gh('POST', '/git/trees', { base_tree: pc.tree.sha, tree });
+  const commit = await gh('POST', '/git/commits', { message, tree: nt.sha, parents: [parent], author: AUTHOR, committer: AUTHOR });
+  await gh('PATCH', `/git/refs/heads/${REPO.branch}`, { sha: commit.sha });
+  return commit.sha;
+}
+async function saveAuth(phone, password) {
+  const blob = await gh('POST', '/git/blobs', { content: JSON.stringify(await sealToken(phone, password, token), null, 1) + '\n', encoding: 'utf-8' });
+  await commitFiles([{ path: AUTH_PATH, mode: '100644', type: 'blob', sha: blob.sha }], 'Панель: телефон и пароль для входа');
+}
+function checkCreds(phone, pw, pw2) {
+  if (normPhone(phone).length < 9) return 'Проверьте номер телефона.';
+  if (pw.length < 6) return 'Пароль должен быть не короче 6 символов.';
+  if (pw !== pw2) return 'Пароли не совпадают.';
+  return '';
 }
 
 // ---------- состояние ----------
@@ -211,31 +265,68 @@ async function loadAll() {
   return restored;
 }
 
-// ---------- вход ----------
+// ---------- экраны: вход и первая настройка ----------
+function formBusy(text) { const e = $('#ferr'); e.hidden = true; const b = $('#fgo'); b.disabled = true; b.textContent = text; }
+function formError(msg) { const e = $('#ferr'); e.textContent = msg; e.hidden = false; const b = $('#fgo'); b.disabled = false; b.textContent = b.dataset.label; }
 function renderLogin(error) {
   $('#app').innerHTML = `<form id="login">
     <h1>Панель управления SUSHI PARA</h1>
-    <p class="hint">Здесь можно менять меню, цены, фото и все тексты сайта. Для входа нужен ключ доступа GitHub — он создаётся один раз.</p>
-    <ol>
-      <li>Откройте <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">создание ключа на GitHub</a> (войдите в аккаунт <b>${esc(REPO.owner)}</b>).</li>
-      <li><b>Token name</b> — любое, например <code>sushi-para-admin</code>. <b>Expiration</b> — срок действия на ваш выбор.</li>
-      <li><b>Repository access</b> → <b>Only select repositories</b> → выберите <code>${esc(REPO.repo)}</code>.</li>
-      <li><b>Permissions</b> → <b>Repository permissions</b> → <b>Contents</b>: <b>Read and write</b>.</li>
-      <li>Нажмите <b>Generate token</b>, скопируйте ключ (начинается с <code>github_pat_</code>) и вставьте сюда.</li>
-    </ol>
-    <label class="field"><span>Ключ доступа</span><input type="password" id="tok" autocomplete="off" placeholder="github_pat_…" required></label>
-    <p class="hint">Ключ хранится только в этом браузере на этом устройстве. Не показывайте его посторонним: с ним можно менять сайт.</p>
-    ${error ? `<div class="err">${esc(error)}</div>` : ''}
-    <div class="rowbtns" style="margin-top:14px"><button class="btn primary" type="submit">Войти</button><a class="btn" href="./">Открыть сайт</a></div>
+    <p class="hint">Меню, цены, фото и все тексты сайта.</p>
+    <label class="field"><span>Телефон</span><input type="tel" id="ph" autocomplete="username" inputmode="tel" placeholder="0557 55 70 85" required></label>
+    <label class="field"><span>Пароль</span><input type="password" id="pw" autocomplete="current-password" required></label>
+    <div class="err" id="ferr" ${error ? '' : 'hidden'}>${esc(error || '')}</div>
+    <div class="rowbtns" style="margin-top:14px"><button class="btn primary" id="fgo" data-label="Войти" type="submit">Войти</button><a class="btn" href="./">Открыть сайт</a></div>
+    <p class="hint" style="margin:16px 0 0"><a href="#" id="tosetup">Первая настройка или забыли пароль</a></p>
   </form>`;
+  $('#tosetup').addEventListener('click', e => { e.preventDefault(); renderSetup(); });
+  $('#login').addEventListener('submit', async e => {
+    e.preventDefault(); formBusy('Проверяю…');
+    let a; try { a = await loadAuth(); } catch (x) { return formError('Нет связи. Проверьте интернет и попробуйте ещё раз.'); }
+    if (!a) return renderSetup('Вход ещё не настроен — это делается один раз.');
+    try { token = await openToken($('#ph').value, $('#pw').value, a); } catch (x) { token = ''; return formError('Неверный телефон или пароль.'); }
+    await start(true);
+  });
+}
+function renderSetup(note) {
+  const link = 'https://github.com/settings/personal-access-tokens/new?name=sushi-para-admin&description=' + encodeURIComponent('Панель управления сайтом SUSHI PARA')
+    + `&target_name=${encodeURIComponent(REPO.owner)}&expires_in=none&contents=write`;
+  $('#app').innerHTML = `<form id="login">
+    <h1>Первая настройка входа</h1>
+    <p class="hint">${esc(note || 'Делается один раз (или если забыли пароль).')} Потом в панель входят просто по телефону и паролю — с любого устройства.</p>
+    <label class="field"><span>Телефон для входа</span><input type="tel" id="ph" autocomplete="username" inputmode="tel" placeholder="0557 55 70 85" required></label>
+    <label class="field"><span>Пароль</span><input type="password" id="pw" autocomplete="new-password" required></label>
+    <label class="field"><span>Пароль ещё раз</span><input type="password" id="pw2" autocomplete="new-password" required></label>
+    <p class="hint" style="margin:6px 0 0">Короткий пароль легко подобрать. Надёжнее — от 10 символов, буквы и цифры.</p>
+    <details open><summary>Ключ GitHub — нужен только сейчас, один раз</summary>
+      <p class="hint" style="margin:8px 0 0">Сайт хранится на GitHub, и чтобы панель могла его менять, ей нужен ключ. Он будет зашифрован вашим паролем, вводить его больше не придётся.</p>
+      <ol>
+        <li>Откройте <a href="${link}" target="_blank" rel="noopener">создание ключа на GitHub</a> (аккаунт <b>${esc(REPO.owner)}</b>).</li>
+        <li><b>Repository access</b> → <b>Only select repositories</b> → выберите <code>${esc(REPO.repo)}</code>.</li>
+        <li>Проверьте: <b>Expiration</b> — <b>No expiration</b>; <b>Permissions</b> → <b>Contents</b> — <b>Read and write</b>.</li>
+        <li>Нажмите <b>Generate token</b>, скопируйте ключ (начинается с <code>github_pat_</code>) и вставьте ниже.</li>
+      </ol>
+      <label class="field"><span>Ключ GitHub</span><input type="password" id="tok" autocomplete="off" placeholder="github_pat_…" required></label>
+    </details>
+    <div class="err" id="ferr" hidden></div>
+    <div class="rowbtns" style="margin-top:14px"><button class="btn primary" id="fgo" data-label="Сохранить и войти" type="submit">Сохранить и войти</button><a class="btn" href="#" id="tologin">Назад ко входу</a></div>
+  </form>`;
+  $('#tologin').addEventListener('click', e => { e.preventDefault(); renderLogin(); });
   $('#login').addEventListener('submit', async e => {
     e.preventDefault();
+    const phone = $('#ph').value, pw = $('#pw').value, bad = checkCreds(phone, pw, $('#pw2').value);
+    if (bad) return formError(bad);
+    formBusy('Сохраняю…');
     token = $('#tok').value.trim();
+    try { await gh('GET', ''); await saveAuth(phone, pw); } catch (x) { token = ''; return formError(explain(x)); }
     await start(true);
   });
 }
 async function start(fromLogin) {
-  if (!token) return renderLogin();
+  if (!token) {
+    $('#app').innerHTML = '<div class="wrap" style="padding:40px 16px"><b>Загрузка…</b></div>';
+    let a = true; try { a = await loadAuth(); } catch (e) {}
+    return a ? renderLogin() : renderSetup('Вход ещё не настроен — это делается один раз.');
+  }
   $('#app').innerHTML = '<div class="wrap" style="padding:40px 16px"><b>Загружаю данные сайта…</b></div>';
   try {
     await gh('GET', '');                       // проверка ключа
@@ -245,7 +336,11 @@ async function start(fromLogin) {
     if (restored) toast('Восстановлены ваши неопубликованные правки с прошлого раза.', 6000);
   } catch (e) {
     const msg = explain(e);
-    if (e.status === 401 || e.status === 403 || e.status === 404 || fromLogin) { try { localStorage.removeItem('sp-admin-token'); } catch (x) {} token = ''; renderLogin(msg); }
+    if (e.status === 401 || e.status === 403 || e.status === 404 || fromLogin) {
+      try { localStorage.removeItem('sp-admin-token'); } catch (x) {} token = '';
+      if (e.status === 401) renderSetup('Ключ GitHub, сохранённый при настройке, больше не действует. Создайте новый и пройдите настройку заново.');
+      else renderLogin(msg);
+    }
     else $('#app').innerHTML = `<div class="wrap" style="padding:40px 16px"><div class="err">${esc(msg)}</div><p><button class="btn" onclick="location.reload()">Повторить</button></p></div>`;
   }
 }
@@ -345,8 +440,15 @@ function settingsHTML() {
       <label class="field"><span>Язык сайта по умолчанию</span><select data-path="settings.defaultLang">${LANGS.map(([l, ln]) => `<option value="${l}" ${s.defaultLang === l ? 'selected' : ''}>${ln}</option>`).join('')}</select>
       <span class="hint" style="font-weight:400;margin-top:4px">На этом языке сайт открывается у новых посетителей.</span></label>
     </div></div>
-    <div class="panel"><h2>Ключ доступа</h2><p class="hint">Ключ хранится только в этом браузере. Если вы заходили с чужого устройства — нажмите «Выйти», и ключ будет удалён отсюда.</p>
-      <button class="btn small danger" data-act="logout">Выйти и удалить ключ с этого устройства</button></div>`;
+    <div class="panel"><h2>Вход в панель</h2>
+      <p class="hint" style="margin:0 0 10px">Здесь можно сменить телефон и пароль, по которым вы входите. Короткий пароль легко подобрать — надёжнее от 10 символов.</p>
+      <div class="g3">
+        <label class="field"><span>Телефон для входа</span><input type="tel" id="nph" autocomplete="off" placeholder="0557 55 70 85"></label>
+        <label class="field"><span>Новый пароль</span><input type="password" id="npw" autocomplete="new-password"></label>
+        <label class="field"><span>Новый пароль ещё раз</span><input type="password" id="npw2" autocomplete="new-password"></label>
+      </div>
+      <div class="rowbtns" style="margin-top:12px"><button class="btn small primary" data-act="auth-save">Сохранить телефон и пароль</button><span class="sp"></span>
+      <button class="btn small danger" data-act="logout">Выйти на этом устройстве</button></div></div>`;
 }
 function statusHTML() {
   if (busy) return ['Публикую…', 'dirty'];
@@ -432,6 +534,14 @@ document.addEventListener('click', async e => {
   const a = b.dataset.act, ci = +b.dataset.ci, ii = +b.dataset.ii;
   if (a === 'logout') { if (isDirty() && !confirm('Есть неопубликованные правки — они пропадут. Выйти?')) return; try { localStorage.removeItem('sp-admin-token'); localStorage.removeItem('sp-admin-draft'); } catch (x) {} token = ''; data = null; renderLogin(); return; }
   if (!data || busy) return;
+  if (a === 'auth-save') {
+    const phone = $('#nph').value, pw = $('#npw').value, bad = checkCreds(phone, pw, $('#npw2').value);
+    if (bad) { toast(bad); return; }
+    b.disabled = true;
+    try { await saveAuth(phone, pw); $('#npw').value = $('#npw2').value = ''; toast('Готово. Теперь вход — по этому телефону и новому паролю.', 6000); }
+    catch (x) { alert('Не удалось сохранить.\n\n' + explain(x)); }
+    b.disabled = false; return;
+  }
   const cats = data.categories, cat = cats[isNaN(ci) ? catIdx : ci];
   if (a === 'view') view = b.dataset.view;
   else if (a === 'cat') { catIdx = ci; openItem = ''; }
@@ -491,11 +601,7 @@ async function publish() {
     }
     const dblob = await gh('POST', '/git/blobs', { content: serialize(data), encoding: 'utf-8' });
     tree.push({ path: DATA_PATH, mode: '100644', type: 'blob', sha: dblob.sha });
-    const pc = await gh('GET', `/git/commits/${parent}`);
-    const nt = await gh('POST', '/git/trees', { base_tree: pc.tree.sha, tree });
-    const commit = await gh('POST', '/git/commits', { message: 'Панель: обновление меню и текстов', tree: nt.sha, parents: [parent], author: AUTHOR, committer: AUTHOR });
-    await gh('PATCH', `/git/refs/heads/${REPO.branch}`, { sha: commit.sha });
-    headSha = commit.sha; dataBlobSha = dblob.sha; savedJSON = JSON.stringify(data); newImages = {};
+    headSha = await commitFiles(tree, 'Панель: обновление меню и текстов', parent); dataBlobSha = dblob.sha; savedJSON = JSON.stringify(data); newImages = {};
     try { localStorage.removeItem('sp-admin-draft'); } catch (x) {}
     busy = false; render();
     toast('Опубликовано. Сайт обновится через 1–3 минуты.', 6000);
