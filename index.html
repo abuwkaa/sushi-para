@@ -102,6 +102,8 @@ header nav{display:flex;flex-wrap:wrap;gap:28px;font-weight:500;font-size:15px}
 
 
 /* footer */
+.admin-link{color:inherit;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.admin-link:hover{color:#B8322A}
 footer .wrap{padding-top:88px;padding-bottom:140px}
 .contacts{display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between;align-items:flex-start}
 .contacts .label{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
@@ -201,7 +203,7 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
       <div style="flex:1 1 180px"><div class="label" data-i18n="f_addr_l">Дарек</div><p data-i18n="f_addr">Нургазиев көч., 102</p></div>
       <div style="flex:1 1 180px"><div class="label" data-i18n="f_hours_l">Иш убактысы</div><p data-i18n="f_hours">Саат 9:00дөн 01:00гө чейин</p></div>
     </div>
-    <p class="copy">© <span data-year>2026</span> <span data-brand>SUSHI PARA</span></p>
+    <p class="copy">© <span data-year>2026</span> <span data-brand>SUSHI PARA</span> · <a class="admin-link" href="admin.html" rel="nofollow" data-i18n="admin_link">Администратор үчүн кирүү</a></p>
   </div>
 </footer>
 
@@ -264,7 +266,7 @@ function applyLang() {
   document.documentElement.lang = lang;
   document.title = t('title');
   document.querySelector('meta[name="description"]').content = t('meta');
-  document.querySelectorAll('[data-i18n]').forEach(e => { e.textContent = t(e.dataset.i18n); });
+  document.querySelectorAll('[data-i18n]').forEach(e => { const v = t(e.dataset.i18n); if (v) e.textContent = v; });
   document.querySelectorAll('[data-i18n-html]').forEach(e => { e.innerHTML = h1HTML(t(e.dataset.i18nHtml)); });
   document.querySelectorAll('[data-i18n-attr]').forEach(e => e.dataset.i18nAttr.split(';').forEach(p => { const [a, k] = p.split(':'); e.setAttribute(a, t(k)); }));
   document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));

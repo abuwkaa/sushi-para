@@ -45,7 +45,8 @@ window.SITE_DATA = {
    "count_many": "Буйрутмада {n} тамак",
    "msg_intro": "Саламатсызбы! SUSHI PARA ресторанынан буйрутма бергим келет:",
    "msg_total": "Жалпы суммасы",
-   "msg_addr": "Жеткирүү дареги"
+   "msg_addr": "Жеткирүү дареги",
+   "admin_link": "Администратор үчүн кирүү"
   },
   "ru": {
    "title": "SUSHI PARA — роллы, пицца и шаурма · Баткен",
@@ -82,7 +83,8 @@ window.SITE_DATA = {
    "count_many": "{n} позиций в заказе",
    "msg_intro": "Здравствуйте! Хочу сделать заказ в SUSHI PARA:",
    "msg_total": "Итого",
-   "msg_addr": "Адрес доставки"
+   "msg_addr": "Адрес доставки",
+   "admin_link": "Вход для администратора"
   },
   "en": {
    "title": "SUSHI PARA — sushi rolls, pizza & shawarma · Batken",
@@ -119,7 +121,8 @@ window.SITE_DATA = {
    "count_many": "{n} items in your order",
    "msg_intro": "Hello! I would like to place an order at SUSHI PARA:",
    "msg_total": "Total",
-   "msg_addr": "Delivery address"
+   "msg_addr": "Delivery address",
+   "admin_link": "Admin login"
   }
  },
  "categories": [
