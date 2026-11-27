@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>SUSHI PARA — панель управления</title>
+<link rel="icon" href="assets/logo.jpg">
+<style>
+:root{--paper:#F7F1E6;--card:#FFFCF6;--line:#E6D9C2;--ink:#1B1714;--muted:#6A6056;--red:#B8322A;--green:#1F8A4C;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 var(--sans)}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{margin:0}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:0 16px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;cursor:pointer;font-weight:700;text-decoration:none;white-space:nowrap}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.green{background:var(--green);border-color:var(--green);color:#fff}
+.btn.danger{border-color:var(--red);color:var(--red)}
+.btn.small{min-height:36px;padding:0 12px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.field{display:block;margin:0}
+.field>span{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
+input[type=text],input[type=number],input[type=password],select,textarea{width:100%;min-height:42px;padding:8px 12px;border:1.5px solid #D8C8AC;border-radius:10px;background:#fff}
+textarea{min-height:64px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ink)}
+.hint{font-size:12.5px;color:var(--muted)}
+
+/* вход */
+#login{max-width:560px;margin:6vh auto;padding:28px;background:var(--card);border:1px solid var(--line);border-radius:18px}
+#login h1{font-size:24px;margin-bottom:6px}
+#login ol{padding-left:20px;margin:12px 0}
+#login li{margin:6px 0}
+#login code{background:#F2E9DA;padding:1px 6px;border-radius:6px}
+.err{margin-top:10px;color:var(--red);font-weight:700}
+
+/* шапка панели */
+#bar{position:sticky;top:0;z-index:20;background:rgba(247,241,230,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+#bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding-top:10px;padding-bottom:10px}
+#bar .t{font-weight:800;font-size:17px;margin-right:auto}
+#status{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;background:#EDE3D0;color:var(--muted)}
+#status.dirty{background:#FBE3B6;color:#7A4A00}
+#status.ok{background:#D9F0E0;color:#17603A}
+#status.bad{background:#F7D4D0;color:#8E1E17}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 0;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;min-height:40px;padding:0 16px;border-radius:999px;border:1.5px solid #D8C8AC;background:var(--card);cursor:pointer;font-weight:700;white-space:nowrap}
+.tab[aria-current=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.tab .n{font-weight:500;opacity:.7;margin-left:6px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.panel h2{font-size:18px;margin-bottom:10px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.rowbtns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sp{flex:1}
+
+/* блюда */
+.item{border:1px solid var(--line);border-radius:14px;background:#fff;margin-bottom:10px;overflow:hidden}
+.item.off{opacity:.62}
+.ihead{display:flex;align-items:center;gap:12px;padding:10px}
+.ihead img,.ihead .noimg{width:76px;height:57px;border-radius:8px;object-fit:cover;background:#F2E9DA;flex:0 0 auto}
+.ihead .nm{flex:1;min-width:0}
+.ihead .nm b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ihead .nm span{font-size:13px;color:var(--muted)}
+.sw{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.sw input{width:20px;height:20px}
+.ibody{border-top:1px dashed var(--line);padding:14px;background:#FFFDF9;display:grid;gap:12px}
+.photo{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.photo img{width:200px;height:150px;border-radius:10px;object-fit:cover;background:#F2E9DA}
+.sizes{display:grid;gap:8px}
+.sizes .s{display:flex;gap:8px;align-items:end}
+.sizes .s label{flex:1}
+.textrow{padding:12px 0;border-top:1px dashed var(--line)}
+.textrow:first-of-type{border-top:none}
+.textrow .lbl{font-weight:700;margin-bottom:2px}
+.langtag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--muted)}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:50;max-width:min(92vw,560px);padding:12px 18px;border-radius:14px;background:var(--ink);color:var(--paper);font-weight:700;box-shadow:0 14px 30px -12px rgba(0,0,0,.5);display:none}
+#toast.on{display:block}
+@media (max-width:760px){.g3,.g2{grid-template-columns:1fr}.panel{padding:12px}.ihead{flex-wrap:wrap;gap:8px}.ihead img,.ihead .noimg{margin-right:4px}.ihead .nm{flex:1 1 calc(100% - 100px)}.ihead .btn.small{padding:0 10px}.ihead [data-act=edit]{margin-left:auto}#bar .t{display:none}#status{margin-right:auto}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" role="status"></div>
+
+<script>
+// ============================================================================================
+// Панель управления сайтом SUSHI PARA.
+// Работает прямо в браузере: читает и сохраняет файл data.js (и фото блюд) в репозитории на GitHub
+// через GitHub API. Для сохранения нужен личный ключ доступа (token) — он хранится только
+// в этом браузере (localStorage) и никуда, кроме api.github.com, не отправляется.
+// ============================================================================================
+const REPO = { owner: 'abuwkaa', repo: 'sushi-para', branch: 'main' };
+// Автор коммитов — служебный адрес GitHub, чтобы личная почта не попадала в публичную историю
+const AUTHOR = { name: 'abuwkaa', email: '173940425+abuwkaa@users.noreply.github.com' };
+const DATA_PATH = 'data.js';
+const DATA_HEADER = '// Данные сайта: меню, цены и тексты. Этот файл меняет админ-панель (admin.html) — вручную лучше не править.\n';
+// Адрес API можно подменить (?api=…) только при локальной разработке — на живом сайте всегда api.github.com
+const IS_LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+const API = (IS_LOCAL && new URLSearchParams(location.search).get('api')) || 'https://api.github.com';
+const LANGS = [['ky', 'Кыргызча'], ['ru', 'Русский'], ['en', 'English']];
+const TEXT_GROUPS = [
+  ['Главный экран', [
+    ['eyebrow', 'Строка над заголовком'],
+    ['h1', 'Главный заголовок', 'Enter — новая строка. Слово в *звёздочках* будет выделено красным.'],
+    ['lead', 'Текст под заголовком'],
+    ['cta_order', 'Кнопка заказа'],
+    ['nav_menu', '«Меню» — в шапке и в заголовке раздела'],
+    ['nav_contacts', '«Контакты» — в шапке и на кнопке']]],
+  ['Меню и карточки блюд', [
+    ['menu_p', 'Подсказка над меню'],
+    ['add', 'Кнопка «В заказ»'],
+    ['cm', 'Единица размера (см)'],
+    ['som', 'Валюта']]],
+  ['Корзина и заказ в WhatsApp', [
+    ['addr_ph', 'Подсказка в поле адреса'],
+    ['clear', 'Кнопка «Очистить»'],
+    ['send', 'Кнопка отправки заказа'],
+    ['count_one', 'Счётчик: одно блюдо', '{n} — количество.'],
+    ['count_few', 'Счётчик: 2–4 блюда', '{n} — количество. Нужно только для русского языка.'],
+    ['count_many', 'Счётчик: 5 и больше блюд', '{n} — количество.'],
+    ['msg_intro', 'Сообщение в WhatsApp: первая строка'],
+    ['msg_total', 'Сообщение в WhatsApp: слово «Итого»'],
+    ['msg_addr', 'Сообщение в WhatsApp: «Адрес доставки»']]],
+  ['Контакты внизу страницы', [
+    ['f_phone', 'Подпись «Телефон»'],
+    ['f_wa', 'Ссылка «Написать в WhatsApp»'],
+    ['f_addr_l', 'Подпись «Адрес»'],
+    ['f_addr', 'Адрес ресторана'],
+    ['f_hours_l', 'Подпись «Часы работы»'],
+    ['f_hours', 'Часы работы']]],
+  ['Для поисковиков и вкладки браузера', [
+    ['title', 'Заголовок вкладки'],
+    ['meta', 'Описание для поисковиков и превью в мессенджерах'],
+    ['logo_alt', 'Описание логотипа']]],
+  ['Служебные подписи (для программ чтения с экрана)', [
+    ['nav_aria', 'Навигация'], ['tabs_aria', 'Лента разделов меню'], ['cart_aria', 'Корзина'], ['addr', 'Поле адреса'],
+    ['size', 'Выбор размера'], ['dec', 'Кнопка «−»'], ['inc', 'Кнопка «+»']]],
+];
+
+// ---------- утилиты ----------
+const $ = (s, r = document) => r.querySelector(s);
+const esc = v => String(v == null ? '' : v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+const b64ToText = b64 => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, '')), c => c.charCodeAt(0)));
+const uid = p => p + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+function getPath(o, path) { return path.split('.').reduce((a, k) => (a == null ? a : a[k]), o); }
+function setPath(o, path, val) { const ks = path.split('.'); const last = ks.pop(); const t = ks.reduce((a, k) => (a[k] == null ? (a[k] = {}) : a[k]), o); t[last] = val; }
+let toastTimer = 0;
+function toast(msg, ms = 3500) { const el = $('#toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('on'), ms); }
+
+// ---------- GitHub API ----------
+let token = '';
+try { token = localStorage.getItem('sp-admin-token') || ''; } catch (e) {}
+async function gh(method, path, body) {
+  const r = await fetch(`${API}/repos/${REPO.owner}/${REPO.repo}${path}`, {
+    method, cache: 'no-store',
+    headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer ' + token, ...(body ? { 'Content-Type': 'application/json' } : {}) },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (!r.ok) {
+    let m = ''; try { m = (await r.json()).message || ''; } catch (e) {}
+    const err = new Error(m || ('Ошибка ' + r.status)); err.status = r.status; throw err;
+  }
+  return r.status === 204 ? null : r.json();
+}
+function explain(e) {
+  if (e.status === 401) return 'Ключ доступа не принят: он неверный или срок его действия истёк.';
+  if (e.status === 403) return 'У ключа нет права изменять сайт. Нужен доступ к репозиторию sushi-para с правом Contents: Read and write.';
+  if (e.status === 404) return 'Репозиторий не найден для этого ключа. Проверьте, что ключ выдан именно на sushi-para.';
+  if (e.status === 409 || e.status === 422) return 'GitHub отклонил сохранение (' + e.message + '). Обновите страницу и попробуйте ещё раз.';
+  if (!e.status) return 'Нет связи с GitHub. Проверьте интернет и попробуйте ещё раз.';
+  return 'Ошибка GitHub: ' + e.message;
+}
+
+// ---------- состояние ----------
+let data = null;          // рабочая копия данных сайта
+let savedJSON = '';       // то, что сейчас опубликовано (для сравнения)
+let headSha = '';         // коммит, с которого загружены данные
+let dataBlobSha = '';     // версия data.js, с которой начали правку
+let newImages = {};       // путь -> { url } — фото (data-URL), выбранные, но ещё не опубликованные
+let view = 'menu';        // menu | texts | settings
+let catIdx = 0;           // выбранный раздел
+let openItem = '';        // id раскрытого блюда
+let busy = false;
+const isDirty = () => !!data && (JSON.stringify(data) !== savedJSON || Object.keys(newImages).length > 0);
+const serialize = d => DATA_HEADER + 'window.SITE_DATA = ' + JSON.stringify(d, null, 1) + ';\n';
+function parseData(text) { return JSON.parse(text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1)); }
+function saveDraft() {
+  try {
+    if (isDirty()) localStorage.setItem('sp-admin-draft', JSON.stringify({ base: dataBlobSha, data, newImages }));
+    else localStorage.removeItem('sp-admin-draft');
+  } catch (e) { /* черновик не поместился (много фото) — не страшно */ }
+}
+window.addEventListener('beforeunload', e => { if (isDirty()) { e.preventDefault(); e.returnValue = ''; } });
+
+async function loadAll() {
+  const ref = await gh('GET', `/git/ref/heads/${REPO.branch}`);
+  headSha = ref.object.sha;
+  const file = await gh('GET', `/contents/${DATA_PATH}?ref=${headSha}`);
+  dataBlobSha = file.sha;
+  data = parseData(b64ToText(file.content));
+  savedJSON = JSON.stringify(data); newImages = {};
+  let restored = false;
+  try {
+    const d = JSON.parse(localStorage.getItem('sp-admin-draft') || 'null');
+    if (d && d.base === dataBlobSha && d.data) { data = d.data; newImages = d.newImages || {}; restored = isDirty(); }
+    else localStorage.removeItem('sp-admin-draft');
+  } catch (e) {}
+  return restored;
+}
+
+// ---------- вход ----------
+function renderLogin(error) {
+  $('#app').innerHTML = `<form id="login">
+    <h1>Панель управления SUSHI PARA</h1>
+    <p class="hint">Здесь можно менять меню, цены, фото и все тексты сайта. Для входа нужен ключ доступа GitHub — он создаётся один раз.</p>
+    <ol>
+      <li>Откройте <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">создание ключа на GitHub</a> (войдите в аккаунт <b>${esc(REPO.owner)}</b>).</li>
+      <li><b>Token name</b> — любое, например <code>sushi-para-admin</code>. <b>Expiration</b> — срок действия на ваш выбор.</li>
+      <li><b>Repository access</b> → <b>Only select repositories</b> → выберите <code>${esc(REPO.repo)}</code>.</li>
+      <li><b>Permissions</b> → <b>Repository permissions</b> → <b>Contents</b>: <b>Read and write</b>.</li>
+      <li>Нажмите <b>Generate token</b>, скопируйте ключ (начинается с <code>github_pat_</code>) и вставьте сюда.</li>
+    </ol>
+    <label class="field"><span>Ключ доступа</span><input type="password" id="tok" autocomplete="off" placeholder="github_pat_…" required></label>
+    <p class="hint">Ключ хранится только в этом браузере на этом устройстве. Не показывайте его посторонним: с ним можно менять сайт.</p>
+    ${error ? `<div class="err">${esc(error)}</div>` : ''}
+    <div class="rowbtns" style="margin-top:14px"><button class="btn primary" type="submit">Войти</button><a class="btn" href="./">Открыть сайт</a></div>
+  </form>`;
+  $('#login').addEventListener('submit', async e => {
+    e.preventDefault();
+    token = $('#tok').value.trim();
+    await start(true);
+  });
+}
+async function start(fromLogin) {
+  if (!token) return renderLogin();
+  $('#app').innerHTML = '<div class="wrap" style="padding:40px 16px"><b>Загружаю данные сайта…</b></div>';
+  try {
+    await gh('GET', '');                       // проверка ключа
+    const restored = await loadAll();
+    try { localStorage.setItem('sp-admin-token', token); } catch (e) {}
+    render();
+    if (restored) toast('Восстановлены ваши неопубликованные правки с прошлого раза.', 6000);
+  } catch (e) {
+    const msg = explain(e);
+    if (e.status === 401 || e.status === 403 || e.status === 404 || fromLogin) { try { localStorage.removeItem('sp-admin-token'); } catch (x) {} token = ''; renderLogin(msg); }
+    else $('#app').innerHTML = `<div class="wrap" style="padding:40px 16px"><div class="err">${esc(msg)}</div><p><button class="btn" onclick="location.reload()">Повторить</button></p></div>`;
+  }
+}
+
+// ---------- отрисовка ----------
+function imgSrc(it) { const p = it.img || ''; return newImages[p] ? newImages[p].url : p; }
+function priceLabel(it) {
+  if (it.sizes && it.sizes.length) return it.sizes.map(z => `${z.cm} см — ${z.price}`).join(' · ') + ' сом';
+  return (it.price == null || it.price === '' ? '—' : it.price) + ' сом';
+}
+function langInputs(base, label, multiline) {
+  return `<div class="g3">${LANGS.map(([l, ln]) => {
+    const v = esc(getPath(data, `${base}.${l}`) || '');
+    return `<label class="field"><span>${esc(label)} · ${ln}</span>${multiline
+      ? `<textarea data-path="${base}.${l}">${v}</textarea>`
+      : `<input type="text" data-path="${base}.${l}" value="${v}">`}</label>`;
+  }).join('')}</div>`;
+}
+function itemHTML(c, ci, it, ii) {
+  const base = `categories.${ci}.items.${ii}`, open = openItem === it.id, src = imgSrc(it);
+  const head = `<div class="ihead">
+      ${src ? `<img src="${esc(src)}" alt="" loading="lazy">` : '<div class="noimg"></div>'}
+      <div class="nm"><b>${esc(it.name.ru || it.name.ky || it.name.en || 'Новое блюдо')}</b><span>${esc(priceLabel(it))}</span></div>
+      <label class="sw"><input type="checkbox" data-act="toggle" data-ci="${ci}" data-ii="${ii}" ${it.hidden ? '' : 'checked'}> В наличии</label>
+      <button class="btn small" data-act="up" data-ci="${ci}" data-ii="${ii}" ${ii === 0 ? 'disabled' : ''} title="Выше">↑</button>
+      <button class="btn small" data-act="down" data-ci="${ci}" data-ii="${ii}" ${ii === c.items.length - 1 ? 'disabled' : ''} title="Ниже">↓</button>
+      <button class="btn small ${open ? 'primary' : ''}" data-act="edit" data-id="${esc(it.id)}">${open ? 'Свернуть' : 'Изменить'}</button>
+    </div>`;
+  if (!open) return `<div class="item ${it.hidden ? 'off' : ''}" data-item="${esc(it.id)}">${head}</div>`;
+  const sized = !!(it.sizes && it.sizes.length);
+  return `<div class="item ${it.hidden ? 'off' : ''}" data-item="${esc(it.id)}">${head}
+    <div class="ibody">
+      <div class="photo">
+        ${src ? `<img src="${esc(src)}" alt="">` : '<div class="noimg" style="width:200px;height:150px;border-radius:10px;background:#F2E9DA"></div>'}
+        <div><label class="btn small">Выбрать фото<input type="file" accept="image/*" data-act="photo" data-ci="${ci}" data-ii="${ii}" hidden></label>
+        <p class="hint" style="margin:8px 0 0">Любое фото: панель сама обрежет его до 4:3<br>и сожмёт. Лучше горизонтальный кадр.</p></div>
+      </div>
+      ${langInputs(base + '.name', 'Название')}
+      ${langInputs(base + '.desc', 'Состав / описание', true)}
+      <div>
+        <div class="rowbtns" style="margin-bottom:8px">
+          <label class="sw"><input type="radio" name="pm-${esc(it.id)}" data-act="price-one" data-ci="${ci}" data-ii="${ii}" ${sized ? '' : 'checked'}> Одна цена</label>
+          <label class="sw"><input type="radio" name="pm-${esc(it.id)}" data-act="price-sizes" data-ci="${ci}" data-ii="${ii}" ${sized ? 'checked' : ''}> Несколько размеров (как у пиццы)</label>
+        </div>
+        ${sized ? `<div class="sizes">${it.sizes.map((z, zi) => `<div class="s">
+            <label class="field"><span>Размер, см</span><input type="number" min="1" data-path="${base}.sizes.${zi}.cm" data-num value="${esc(z.cm)}"></label>
+            <label class="field"><span>Цена, сом</span><input type="number" min="0" data-path="${base}.sizes.${zi}.price" data-num value="${esc(z.price)}"></label>
+            <button class="btn small danger" data-act="size-del" data-ci="${ci}" data-ii="${ii}" data-zi="${zi}" ${it.sizes.length < 2 ? 'disabled' : ''}>Убрать</button></div>`).join('')}
+            <div><button class="btn small" data-act="size-add" data-ci="${ci}" data-ii="${ii}">+ Размер</button></div></div>`
+          : `<label class="field" style="max-width:220px"><span>Цена, сом</span><input type="number" min="0" data-path="${base}.price" data-num value="${esc(it.price == null ? '' : it.price)}"></label>`}
+      </div>
+      <div class="rowbtns">
+        <label class="field" style="min-width:220px"><span>Раздел</span><select data-act="move" data-ci="${ci}" data-ii="${ii}">${data.categories.map((x, xi) => `<option value="${xi}" ${xi === ci ? 'selected' : ''}>${esc(x.name.ru || x.name.ky || x.id)}</option>`).join('')}</select></label>
+        <span class="sp"></span>
+        <button class="btn small danger" data-act="del" data-ci="${ci}" data-ii="${ii}">Удалить блюдо</button>
+      </div>
+    </div></div>`;
+}
+function menuHTML() {
+  if (catIdx >= data.categories.length) catIdx = Math.max(0, data.categories.length - 1);
+  const c = data.categories[catIdx];
+  const chips = `<div class="tabs">${data.categories.map((x, i) => `<button class="tab" data-act="cat" data-ci="${i}" aria-current="${i === catIdx}">${esc(x.name.ru || x.name.ky || 'Без названия')}<span class="n">${x.items.length}</span></button>`).join('')}<button class="tab" data-act="cat-add">+ Раздел</button></div>`;
+  if (!c) return chips + '<div class="panel">Разделов пока нет. Нажмите «+ Раздел».</div>';
+  return chips + `<div class="panel">
+      <h2>Раздел</h2>
+      ${langInputs(`categories.${catIdx}.name`, 'Название раздела')}
+      <div class="rowbtns" style="margin-top:10px">
+        <button class="btn small" data-act="cat-left" ${catIdx === 0 ? 'disabled' : ''}>← Раньше в меню</button>
+        <button class="btn small" data-act="cat-right" ${catIdx === data.categories.length - 1 ? 'disabled' : ''}>Позже в меню →</button>
+        <span class="sp"></span>
+        <button class="btn small danger" data-act="cat-del">Удалить раздел</button>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="rowbtns" style="margin-bottom:12px"><h2 style="margin:0">Блюда · ${c.items.length}</h2><span class="sp"></span><button class="btn small primary" data-act="item-add">+ Добавить блюдо</button></div>
+      ${c.items.map((it, ii) => itemHTML(c, catIdx, it, ii)).join('') || '<p class="hint">В разделе пока нет блюд. Пустой раздел на сайте не показывается.</p>'}
+      ${c.items.length > 4 ? '<div><button class="btn small primary" data-act="item-add">+ Добавить блюдо</button></div>' : ''}
+    </div>`;
+}
+function textsHTML() {
+  return TEXT_GROUPS.map(([title, rows]) => `<div class="panel"><h2>${esc(title)}</h2>${rows.map(([key, label, hint]) => `<div class="textrow">
+      <div class="lbl">${esc(label)}</div>${hint ? `<div class="hint" style="margin-bottom:6px">${esc(hint)}</div>` : ''}
+      <div class="g3">${LANGS.map(([l, ln]) => { const v = getPath(data, `texts.${l}.${key}`) || ''; const multi = v.length > 60 || v.includes('\n') || key === 'h1' || key === 'lead' || key === 'meta' || key === 'menu_p';
+        return `<label class="field"><span class="langtag">${ln}</span>${multi ? `<textarea data-path="texts.${l}.${key}">${esc(v)}</textarea>` : `<input type="text" data-path="texts.${l}.${key}" value="${esc(v)}">`}</label>`; }).join('')}</div>
+    </div>`).join('')}</div>`).join('');
+}
+function settingsHTML() {
+  const s = data.settings || (data.settings = {});
+  const f = (k, label, hint) => `<label class="field"><span>${esc(label)}</span><input type="text" data-path="settings.${k}" value="${esc(s[k] == null ? '' : s[k])}">${hint ? `<span class="hint" style="font-weight:400;margin-top:4px">${esc(hint)}</span>` : ''}</label>`;
+  return `<div class="panel"><h2>Название и контакты</h2><div class="g2">
+      ${f('brand', 'Название ресторана', 'Показывается в шапке и внизу страницы.')}
+      ${f('phone', 'Телефон — как показывать', 'Например: 0557 55 70 85')}
+      ${f('phoneIntl', 'Телефон для звонка', 'В международном формате: +996557557085')}
+      ${f('whatsapp', 'Номер WhatsApp для заказов', 'Только цифры с кодом страны: 996557557085')}
+    </div></div>
+    <div class="panel"><h2>Язык</h2><div class="g2">
+      <label class="field"><span>Язык сайта по умолчанию</span><select data-path="settings.defaultLang">${LANGS.map(([l, ln]) => `<option value="${l}" ${s.defaultLang === l ? 'selected' : ''}>${ln}</option>`).join('')}</select>
+      <span class="hint" style="font-weight:400;margin-top:4px">На этом языке сайт открывается у новых посетителей.</span></label>
+    </div></div>
+    <div class="panel"><h2>Ключ доступа</h2><p class="hint">Ключ хранится только в этом браузере. Если вы заходили с чужого устройства — нажмите «Выйти», и ключ будет удалён отсюда.</p>
+      <button class="btn small danger" data-act="logout">Выйти и удалить ключ с этого устройства</button></div>`;
+}
+function statusHTML() {
+  if (busy) return ['Публикую…', 'dirty'];
+  return isDirty() ? ['Есть неопубликованные правки', 'dirty'] : ['Всё опубликовано', 'ok'];
+}
+function refreshBar() {
+  const [txt, cls] = statusHTML(); const st = $('#status'); if (!st) return;
+  st.textContent = txt; st.className = cls;
+  $('#publish').disabled = busy || !isDirty();
+  $('#discard').disabled = busy || !isDirty();
+}
+function render() {
+  const y = window.scrollY;
+  $('#app').innerHTML = `<div id="bar"><div class="wrap">
+      <div class="t">SUSHI PARA · панель</div>
+      <span id="status"></span>
+      <a class="btn small" href="./" target="_blank" rel="noopener">Открыть сайт</a>
+      <button class="btn small" id="discard" data-act="discard">Отменить правки</button>
+      <button class="btn small green" id="publish" data-act="publish">Опубликовать</button>
+    </div></div>
+    <div class="wrap">
+      <div class="tabs">${[['menu', 'Меню и цены'], ['texts', 'Тексты сайта'], ['settings', 'Контакты и настройки']].map(([v, n]) => `<button class="tab" data-act="view" data-view="${v}" aria-current="${view === v}">${n}</button>`).join('')}</div>
+      ${view === 'menu' ? menuHTML() : view === 'texts' ? textsHTML() : settingsHTML()}
+      <p class="hint" style="margin:6px 0 40px">После нажатия «Опубликовать» изменения появляются на сайте через 1–3 минуты.</p>
+    </div>`;
+  refreshBar();
+  window.scrollTo(0, y);
+}
+
+// ---------- фото: обрезка до 4:3 и сжатие прямо в браузере ----------
+function fileToImage(file) {
+  return new Promise((res, rej) => { const url = URL.createObjectURL(file); const im = new Image(); im.onload = () => { URL.revokeObjectURL(url); res(im); }; im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('Не удалось прочитать файл как изображение.')); }; im.src = url; });
+}
+async function preparePhoto(file) {
+  const im = await fileToImage(file), W = 1200, H = 900;
+  const k = Math.max(W / im.naturalWidth, H / im.naturalHeight), sw = W / k, sh = H / k;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  cv.getContext('2d').drawImage(im, (im.naturalWidth - sw) / 2, (im.naturalHeight - sh) / 2, sw, sh, 0, 0, W, H);
+  let url = cv.toDataURL('image/webp', 0.82), ext = 'webp';
+  if (!url.startsWith('data:image/webp')) { url = cv.toDataURL('image/jpeg', 0.85); ext = 'jpg'; }   // старые браузеры не умеют WebP
+  return { url, ext };
+}
+
+// ---------- действия ----------
+function newItem() { return { id: uid('d'), name: { ky: '', ru: '', en: '' }, desc: { ky: '', ru: '', en: '' }, price: 0, img: '' }; }
+document.addEventListener('input', e => {
+  const el = e.target; if (!el.dataset || !el.dataset.path || !data) return;
+  let v = el.value;
+  if (el.dataset.num !== undefined) v = v === '' ? 0 : Math.max(0, Math.round(Number(v) || 0));
+  setPath(data, el.dataset.path, v);
+  const m = /^categories\.(\d+)(?:\.items\.(\d+))?\./.exec(el.dataset.path);
+  if (m) {
+    const c = data.categories[+m[1]];
+    if (m[2] !== undefined) {
+      const it = c.items[+m[2]], box = el.closest('.item');
+      if (box) { $('.nm b', box).textContent = it.name.ru || it.name.ky || it.name.en || 'Новое блюдо'; $('.nm span', box).textContent = priceLabel(it); }
+    } else {
+      const chip = document.querySelector(`.tab[data-act="cat"][data-ci="${m[1]}"]`);
+      if (chip) chip.firstChild.textContent = c.name.ru || c.name.ky || 'Без названия';
+    }
+  }
+  refreshBar(); saveDraft();
+});
+document.addEventListener('change', async e => {
+  const el = e.target, a = el.dataset && el.dataset.act; if (!a || !data) return;
+  const ci = +el.dataset.ci, ii = +el.dataset.ii, cat = data.categories[ci], it = cat && cat.items[ii];
+  if (a === 'toggle') { if (el.checked) delete it.hidden; else it.hidden = true; }
+  else if (a === 'price-one') { it.price = it.sizes && it.sizes[0] ? it.sizes[0].price : (it.price || 0); delete it.sizes; }
+  else if (a === 'price-sizes') { it.sizes = [{ cm: 25, price: it.price || 0 }, { cm: 30, price: it.price || 0 }, { cm: 35, price: it.price || 0 }]; delete it.price; }
+  else if (a === 'move') { const to = +el.value; if (to !== ci) { cat.items.splice(ii, 1); data.categories[to].items.push(it); catIdx = to; } }
+  else if (a === 'photo') {
+    const file = el.files && el.files[0]; if (!file) return;
+    try {
+      const p = await preparePhoto(file), path = `assets/images/${it.id}-${Date.now().toString(36)}.${p.ext}`;
+      if (it.img && newImages[it.img]) delete newImages[it.img];     // заменили ещё не опубликованное фото
+      newImages[path] = { url: p.url }; it.img = path;
+    } catch (err) { toast(err.message); return; }
+  } else return;
+  render(); saveDraft();
+});
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-act]'); if (!b || b.tagName === 'INPUT' || b.tagName === 'SELECT') return;
+  const a = b.dataset.act, ci = +b.dataset.ci, ii = +b.dataset.ii;
+  if (a === 'logout') { if (isDirty() && !confirm('Есть неопубликованные правки — они пропадут. Выйти?')) return; try { localStorage.removeItem('sp-admin-token'); localStorage.removeItem('sp-admin-draft'); } catch (x) {} token = ''; data = null; renderLogin(); return; }
+  if (!data || busy) return;
+  const cats = data.categories, cat = cats[isNaN(ci) ? catIdx : ci];
+  if (a === 'view') view = b.dataset.view;
+  else if (a === 'cat') { catIdx = ci; openItem = ''; }
+  else if (a === 'cat-add') { cats.push({ id: uid('c'), name: { ky: '', ru: 'Новый раздел', en: '' }, items: [] }); catIdx = cats.length - 1; openItem = ''; }
+  else if (a === 'cat-left' || a === 'cat-right') { const j = catIdx + (a === 'cat-left' ? -1 : 1); [cats[catIdx], cats[j]] = [cats[j], cats[catIdx]]; catIdx = j; }
+  else if (a === 'cat-del') { const c = cats[catIdx]; if (!confirm(`Удалить раздел «${c.name.ru || c.name.ky || ''}»` + (c.items.length ? ` вместе с блюдами (${c.items.length} шт.)?` : '?'))) return; cats.splice(catIdx, 1); openItem = ''; }
+  else if (a === 'item-add') { const it = newItem(); cats[catIdx].items.push(it); openItem = it.id; }
+  else if (a === 'edit') openItem = openItem === b.dataset.id ? '' : b.dataset.id;
+  else if (a === 'up' || a === 'down') { const j = ii + (a === 'up' ? -1 : 1); [cat.items[ii], cat.items[j]] = [cat.items[j], cat.items[ii]]; }
+  else if (a === 'del') { const it = cat.items[ii]; if (!confirm(`Удалить блюдо «${it.name.ru || it.name.ky || 'без названия'}»?`)) return; if (it.img && newImages[it.img]) delete newImages[it.img]; cat.items.splice(ii, 1); openItem = ''; }
+  else if (a === 'size-add') { const z = cat.items[ii].sizes; z.push({ cm: (z[z.length - 1] ? z[z.length - 1].cm + 5 : 25), price: z[z.length - 1] ? z[z.length - 1].price : 0 }); }
+  else if (a === 'size-del') cat.items[ii].sizes.splice(+b.dataset.zi, 1);
+  else if (a === 'discard') { if (!confirm('Отменить все неопубликованные правки?')) return; data = JSON.parse(savedJSON); newImages = {}; openItem = ''; }
+  else if (a === 'publish') { await publish(); return; }
+  else return;
+  render(); saveDraft();
+  if (a === 'item-add') { const el = [...document.querySelectorAll('[data-item]')].find(x => x.dataset.item === openItem); if (el) el.scrollIntoView({ block: 'center' }); }
+});
+
+// ---------- проверка и публикация ----------
+function validate() {
+  const errs = [], ids = new Set();
+  data.categories.forEach(c => {
+    const cn = c.name.ru || c.name.ky || c.name.en;
+    if (!cn) errs.push('У одного из разделов нет названия.');
+    c.items.forEach(it => {
+      const n = it.name.ru || it.name.ky || it.name.en;
+      if (!n) errs.push(`В разделе «${cn || '?'}» есть блюдо без названия.`);
+      if (ids.has(it.id)) it.id = uid('d'); ids.add(it.id);
+      if (it.sizes && it.sizes.length) {
+        const seen = new Set();
+        it.sizes.forEach(z => { if (!(z.cm > 0)) errs.push(`«${n}»: у размера не указаны сантиметры.`); if (seen.has(z.cm)) errs.push(`«${n}»: размер ${z.cm} см указан дважды.`); seen.add(z.cm); });
+      } else if (!(it.price >= 0) || it.price === '') errs.push(`«${n}»: не указана цена.`);
+    });
+  });
+  if (!((data.settings.whatsapp || '').replace(/\D/g, '').length >= 9)) errs.push('В настройках не указан номер WhatsApp — заказы некуда отправлять.');
+  return [...new Set(errs)];
+}
+async function publish() {
+  const errs = validate();
+  if (errs.length) { alert('Нужно исправить перед публикацией:\n\n• ' + errs.slice(0, 12).join('\n• ')); return; }
+  busy = true; refreshBar();
+  try {
+    // 1. Не изменились ли данные на сайте, пока панель была открыта (правка с другого устройства)?
+    const ref = await gh('GET', `/git/ref/heads/${REPO.branch}`); let parent = ref.object.sha;
+    if (parent !== headSha) {
+      const cur = await gh('GET', `/contents/${DATA_PATH}?ref=${parent}`);
+      if (cur.sha !== dataBlobSha && !confirm('Пока панель была открыта, меню на сайте изменили с другого устройства.\n\nОК — опубликовать мои правки поверх (чужие правки пропадут).\nОтмена — ничего не публиковать.')) { busy = false; refreshBar(); return; }
+    }
+    // 2. Используемые новые фото и сам файл данных -> один общий коммит
+    const used = new Set(data.categories.flatMap(c => c.items.map(i => i.img)));
+    const tree = [];
+    for (const [path, im] of Object.entries(newImages)) {
+      if (!used.has(path)) continue;
+      const blob = await gh('POST', '/git/blobs', { content: im.url.slice(im.url.indexOf(',') + 1), encoding: 'base64' });
+      tree.push({ path, mode: '100644', type: 'blob', sha: blob.sha });
+    }
+    const dblob = await gh('POST', '/git/blobs', { content: serialize(data), encoding: 'utf-8' });
+    tree.push({ path: DATA_PATH, mode: '100644', type: 'blob', sha: dblob.sha });
+    const pc = await gh('GET', `/git/commits/${parent}`);
+    const nt = await gh('POST', '/git/trees', { base_tree: pc.tree.sha, tree });
+    const commit = await gh('POST', '/git/commits', { message: 'Панель: обновление меню и текстов', tree: nt.sha, parents: [parent], author: AUTHOR, committer: AUTHOR });
+    await gh('PATCH', `/git/refs/heads/${REPO.branch}`, { sha: commit.sha });
+    headSha = commit.sha; dataBlobSha = dblob.sha; savedJSON = JSON.stringify(data); newImages = {};
+    try { localStorage.removeItem('sp-admin-draft'); } catch (x) {}
+    busy = false; render();
+    toast('Опубликовано. Сайт обновится через 1–3 минуты.', 6000);
+  } catch (e) {
+    busy = false; refreshBar();
+    const st = $('#status'); if (st) { st.textContent = 'Не опубликовано'; st.className = 'bad'; }
+    alert('Не удалось опубликовать.\n\n' + explain(e) + '\n\nВаши правки не потеряны — они остались в панели.');
+  }
+}
+
+start(false);
+</script>
+</body>
+</html>
