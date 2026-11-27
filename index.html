@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Суши Пара — роллдор жана шаурма · Баткен</title>
-<meta name="description" content="Суши Пара: классикалык, бышырылган жана ысык роллдор, шаурма. Буйрутма WhatsApp аркылуу: 0557 55 70 85. Нургазиев көч., 102.">
+<title>SUSHI PARA — роллдор, пицца жана шаурма · Баткен</title>
+<meta name="description" content="SUSHI PARA: роллдор, пицца, шаурма, бургерлер жана канатчалар. Буйрутма WhatsApp аркылуу: 0557 55 70 85. Нургазиев көч., 102.">
 <link rel="icon" href="assets/logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,6 +88,10 @@ header nav{display:flex;flex-wrap:wrap;gap:28px;font-weight:500;font-size:15px}
 .badge{position:absolute;top:10px;right:10px;background:var(--red);color:#fff;font-weight:700;font-size:13px;border-radius:999px;padding:3px 10px}
 .card h4{margin:0;font-family:var(--serif);font-weight:700;font-size:19px;line-height:1.35}
 .card p{margin:0;font-size:13.5px;line-height:1.6;color:var(--muted);flex:1}
+.sizes{display:flex;gap:6px}
+.sizes button{flex:1;cursor:pointer;min-height:38px;padding:0 6px;border-radius:999px;border:1.5px solid #D8C8AC;background:transparent;color:var(--ink);font:700 13px var(--sans);white-space:nowrap}
+.sizes button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.sizes .q{margin-left:5px;padding:1px 6px;border-radius:999px;background:var(--red);color:#fff;font-size:11px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px dashed #E0D2BA}
 .price{font-weight:700;font-size:19px}.price small{font-weight:500;font-size:13px;color:#6E6458}
 .add{min-height:44px;padding:0 18px;font-size:14px}
@@ -117,7 +121,7 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
 #cart .sum b{display:block;font-size:16px}
 #cart .sum span{font-size:13px;color:#C7BCAD}
 #cart .clear{cursor:pointer;min-height:44px;padding:0 12px;border:none;background:transparent;color:#C7BCAD;font:14px var(--sans)}
-@media (max-width:560px){header{position:static}.tabs{margin-left:-28px;margin-right:-28px}.tab{min-height:42px;padding:0 16px}#cart{border-radius:22px;padding:12px}#cart>svg{margin-left:4px}#cart .wa{flex:1 1 100%;justify-content:center}header nav{display:none}}
+@media (max-width:560px){header{position:static}.lang button{padding:0 10px;font-size:12px}.hdr-r .btn{padding:0 16px}.tabs{margin-left:-28px;margin-right:-28px}.tab{min-height:42px;padding:0 16px}#cart{border-radius:22px;padding:12px}#cart>svg{margin-left:4px}#cart .wa{flex:1 1 100%;justify-content:center}header nav{display:none}}
 </style>
 </head>
 <body>
@@ -127,10 +131,10 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
 
 <header>
   <div class="wrap">
-    <a href="#top" class="brand"><img src="assets/logo.jpg" alt="">Суши Пара</a>
+    <a href="#top" class="brand"><img src="assets/logo.jpg" alt="">SUSHI PARA</a>
     <nav aria-label="Бөлүмдөр" data-i18n-attr="aria-label:nav_aria"><a href="#menu" data-i18n="nav_menu">Меню</a><a href="#contacts" data-i18n="nav_contacts">Байланыш</a></nav>
     <div class="hdr-r">
-      <div class="lang" role="group" aria-label="Язык / Тил"><button type="button" data-lang="ru" aria-pressed="false">РУС</button><button type="button" data-lang="ky" aria-pressed="true">КЫР</button></div>
+      <div class="lang" role="group" aria-label="Тил / Язык / Language"><button type="button" data-lang="ky" aria-pressed="true">КЫР</button><button type="button" data-lang="ru" aria-pressed="false">РУС</button><button type="button" data-lang="en" aria-pressed="false">ENG</button></div>
       <a href="tel:+996557557085" class="btn">
         <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-3 2a11 11 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>0557 55 70 85
       </a>
@@ -155,9 +159,9 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
     <div class="hero-text">
       <div class="vertical" aria-hidden="true">寿司と桜</div>
       <div>
-        <p class="eyebrow" data-i18n="eyebrow">Роллдор · Шаурма · Баткен</p>
+        <p class="eyebrow" data-i18n="eyebrow">Роллдор · Пицца · Шаурма · Баткен</p>
         <h1 data-i18n-html="h1">Бөлүшкүңүз<br>келген <span>даам</span></h1>
-        <p class="lead" data-i18n="lead">Кол менен жасалган классикалык, меште бышырылган жана ысык роллдор, ширелүү шаурма — буйрутмаңыздан кийин дароо даярдайбыз.</p>
+        <p class="lead" data-i18n="lead">Кол менен жасалган классикалык, меште бышырылган жана ысык роллдор, пицца, ширелүү шаурма — буйрутмаңыздан кийин дароо даярдайбыз.</p>
         <div class="ctas"><a href="#menu" class="btn" data-i18n="cta_order">Буйрутма берүү</a><a href="#contacts" class="btn ghost" data-i18n="nav_contacts">Байланыш</a></div>
       </div>
     </div>
@@ -167,7 +171,7 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
           <circle cx="100" cy="100" r="92" fill="none" stroke="#1B1714" stroke-width="7" stroke-linecap="round" stroke-dasharray="520 60" transform="rotate(-70 100 100)" opacity=".88"/>
           <circle cx="100" cy="100" r="86" fill="none" stroke="#1B1714" stroke-width="2" stroke-linecap="round" stroke-dasharray="380 160" transform="rotate(-40 100 100)" opacity=".4"/>
         </svg>
-        <img class="logo" src="assets/logo.jpg" alt="Суши Пара логотиби" data-i18n-attr="alt:logo_alt">
+        <img class="logo" src="assets/logo.jpg" alt="SUSHI PARA логотиби" data-i18n-attr="alt:logo_alt">
         <div class="hanko" aria-hidden="true">寿</div>
       </div>
     </div>
@@ -178,7 +182,7 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
   <div class="wrap">
     <div class="section-head">
       <div class="kanji" aria-hidden="true">お品書き</div>
-      <h2>Меню</h2>
+      <h2 data-i18n="nav_menu">Меню</h2>
       <p data-i18n="menu_p">Тамактарды тандаңыз — себет сумманы эсептеп, буйрутманы WhatsApp'ка жөнөтөт. Жеткирип беребиз же өзүңүз алып кетсеңиз болот.</p>
     </div>
     <nav class="tabs" aria-label="Менюнун бөлүмдөрү" data-i18n-attr="aria-label:tabs_aria" id="tabs"></nav>
@@ -191,13 +195,13 @@ footer .wrap{padding-top:88px;padding-bottom:140px}
     <div class="contacts">
       <div style="flex:1 1 300px;display:flex;gap:18px;align-items:center">
         <img src="assets/logo.jpg" alt="" style="width:88px;height:88px;border-radius:50%;object-fit:cover">
-        <div><div style="font:700 28px var(--serif)">Суши Пара</div><div class="kanji" aria-hidden="true" style="margin-top:4px;letter-spacing:.3em">連絡先</div></div>
+        <div><div style="font:700 28px var(--serif)">SUSHI PARA</div><div class="kanji" aria-hidden="true" style="margin-top:4px;letter-spacing:.3em">連絡先</div></div>
       </div>
       <div style="flex:1 1 180px"><div class="label" data-i18n="f_phone">Телефон</div><a class="big" href="tel:+996557557085">0557 55 70 85</a><a href="https://wa.me/996557557085" target="_blank" rel="noopener" style="display:inline-block;margin-top:8px;font-weight:700;color:var(--wa)" data-i18n="f_wa">WhatsApp'ка жазуу</a></div>
       <div style="flex:1 1 180px"><div class="label" data-i18n="f_addr_l">Дарек</div><p data-i18n="f_addr">Нургазиев көч., 102</p></div>
       <div style="flex:1 1 180px"><div class="label" data-i18n="f_hours_l">Иш убактысы</div><p data-i18n="f_hours">Саат 9:00дөн 01:00гө чейин</p></div>
     </div>
-    <p class="copy">© 2026 Суши Пара</p>
+    <p class="copy">© 2026 SUSHI PARA</p>
   </div>
 </footer>
 
@@ -238,6 +242,27 @@ const MENU = [
     ['caesar-hot','Цезарь горячий','Рис, соус цезарь, курица, помидор, капуста',360],
     ['hot-california','Горячая Калифорния','Рис, сыр, краб, огурцы',350],
     ['chicken-tempura','Чиккен темпура','Рис, огурцы, курица',330]]},
+  { id: 'pizza', label: 'Пицца', kind: 'hot', items: [
+    ["pizza-pepperoni","Пицца пеперони","Соус, сыр, колбаса",[[25,330],[30,450],[35,550]]],
+    ["pizza-pepperoni-double","Пицца пеперони двойная","Соус, сыр, колбаса",[[25,380],[30,490],[35,650]]],
+    ["pizza-margherita","Пицца маргарита","Соус, помидор, сыр",[[25,330],[30,450],[35,550]]],
+    ["pizza-cheese","Пицца сырная","Сырный соус, чеддер, сыр",[[25,330],[30,460],[35,550]]],
+    ["pizza-four-cheese","Пицца четыре сыра","Томатный соус, моцарелла, чеддер, пармезан, сырный соус",[[25,370],[30,470],[35,570]]],
+    ["pizza-chicken-veg","Пицца с курицей и овощами","Соус, курица, помидор, сыр",[[25,330],[30,450],[35,550]]],
+    ["pizza-chicken-mushroom","Пицца с курицей и грибами","Соус, курица, грибы, сыр",[[25,330],[30,410],[35,550]]],
+    ["pizza-chicken","Пицца чиккен","Томатный соус, моцарелла, курица, помидор, красный лук",[[25,330],[30,450],[35,550]]],
+    ["pizza-hawaiian","Пицца гавайская","Соус, курица, ананас, сыр",[[25,330],[30,450],[35,550]]],
+    ["pizza-caesar","Пицца цезарь","Соус цезарь, моцарелла, курица, пармезан, томат, капуста",[[25,330],[30,450],[35,550]]],
+    ["pizza-meat","Пицца мясная","Соус, фарш, колбаса, сыр",[[25,350],[30,470],[35,570]]],
+    ["pizza-meat-veg","Пицца мясная с овощами","Соус, фарш, солёные огурцы, сыр, оливки, красный лук",[[25,330],[30,470],[35,580]]],
+    ["pizza-bavarian","Пицца баварская","Соус, колбаса, солёные огурцы, сыр, красный лук",[[25,330],[30,390],[35,550]]],
+    ["pizza-diablo","Пицца диабло","Томатный соус, моцарелла, пеперони, перец халапеньо",[[25,330],[30,410],[35,550]]],
+    ["pizza-mexican","Пицца мексиканская","Томатный соус, соус чили, сыр, пеперони, кукуруза, маслины, перец халапеньо, перец болгарский",[[25,350],[30,470],[35,560]]],
+    ["pizza-burger","Пицца бургер","Горчичный соус, сыр, фарш, перец болгарский, помидор, солёные огурцы, кетчуп, капуста",[[25,350],[30,470],[35,550]]],
+    ["pizza-greek","Пицца греческая","Томатный соус, сыр, помидор, маслины, перец болгарский, сыр фета",[[25,350],[30,460],[35,570]]],
+    ["pizza-assorti","Пицца ассорти","Томатный соус, сыр, курица, фарш, перец болгарский, помидор, солёные огурцы",[[25,350],[30,470],[35,570]]],
+    ["pizza-mix","Пицца микс","Половина сырная (сырный соус, моцарелла, чеддер), половина мясная (соус, томат, фарш, колбаса)",[[25,350],[30,470],[35,590]]],
+    ["pizza-four-seasons","Пицца четыре сезона","Четыре части: пеперони, мясная, курица с грибами, сырная",[[30,490],[35,590]]]]},
   { id: 'shawa', label: 'Шаурма', kind: 'shawa', items: [
     ['shawarma-mini','Шаурма мини','Фирменная, с говядиной',170],
     ['shawarma-standard','Шаурма стандарт','Фирменная, с говядиной',220],
@@ -270,7 +295,7 @@ const MENU = [
     ['wings-30','Крылышки 30 шт','+ сырный соус 2 шт, чесночный соус',1110],
     ['wings-50','Крылышки 50 шт','+ сырный соус 2 шт, чесночный соус 2 шт',1700],
     ['wings-100','Крылышки 100 шт','+ сырный соус 3 шт, чесночный соус',3300]]}
-].map(c => ({ ...c, items: c.items.map(([slug,name,desc,price]) => ({ slug, name, desc, price, kind: c.kind })) }));
+].map(c => ({ ...c, items: c.items.map(([slug,name,desc,price]) => { const sizes = Array.isArray(price) ? price : null; return { slug, name, desc, price: sizes ? sizes[0][1] : price, sizes, kind: c.kind }; }) }));
 const ALL = MENU.flatMap(c => c.items);
 
 // ===== SVG-заглушки, пока нет фото assets/images/<slug>.webp =====
@@ -294,38 +319,40 @@ const plural = n => { const a = n % 10, b = n % 100; return a === 1 && b !== 11 
 // ===== Языки: русский и кыргызский =====
 const T = {
   ru: {
-    title: 'Суши Пара — роллы и шаурма · Баткен',
-    meta: 'Суши Пара: роллы, запечённые и горячие роллы, шаурма. Заказ в WhatsApp 0557 55 70 85. ул. Нургазиева, 102.',
-    nav_aria: 'Разделы', nav_menu: 'Меню', nav_contacts: 'Контакты',
-    eyebrow: 'Роллы · Шаурма · Баткен',
-    h1: 'Вкус, которым<br>хочется <span>делиться</span>',
-    lead: 'Классические, запечённые и горячие роллы ручной работы, сочная шаурма — готовим сразу после заказа.',
-    cta_order: 'Заказать', logo_alt: 'Логотип Суши Пара',
-    menu_p: 'Выберите блюда — корзина посчитает сумму и отправит заказ в WhatsApp. Доставка или самовывоз.', tabs_aria: 'Разделы меню',
-    f_phone: 'Телефон', f_wa: 'Написать в WhatsApp', f_addr_l: 'Адрес', f_addr: 'ул. Нургазиева, 102',
-    f_hours_l: 'Часы работы', f_hours: 'С 9:00 до 01:00',
-    cart_aria: 'Корзина', addr: 'Адрес доставки', addr_ph: 'Адрес доставки: улица, дом, квартира',
-    clear: 'Очистить', send: 'Отправить в WhatsApp', add: 'В заказ +', dec: 'Убрать одну', inc: 'Добавить ещё',
-    cats: { rolls: 'Роллы', baked: 'Запечённые', hot: 'Горячие', shawa: 'Шаурма', soups: 'Супы', pasta: 'Паста и гриль', burgers: 'Бургеры и снеки', wings: 'Крылышки' },
+    title: "SUSHI PARA — роллы, пицца и шаурма · Баткен", meta: "SUSHI PARA: роллы, пицца, шаурма, бургеры и крылышки. Заказ в WhatsApp 0557 55 70 85. ул. Нургазиева, 102.",
+    nav_aria: "Разделы", nav_menu: "Меню", nav_contacts: "Контакты", eyebrow: "Роллы · Пицца · Шаурма · Баткен", h1: "Вкус, которым<br>хочется <span>делиться</span>",
+    lead: "Классические, запечённые и горячие роллы ручной работы, пицца, сочная шаурма — готовим сразу после заказа.",
+    cta_order: "Заказать", logo_alt: "Логотип SUSHI PARA", menu_p: "Выберите блюда — корзина посчитает сумму и отправит заказ в WhatsApp. Доставка или самовывоз.",
+    tabs_aria: "Разделы меню", f_phone: "Телефон", f_wa: "Написать в WhatsApp", f_addr_l: "Адрес", f_addr: "ул. Нургазиева, 102",
+    f_hours_l: "Часы работы", f_hours: "С 9:00 до 01:00", cart_aria: "Корзина", addr: "Адрес доставки", addr_ph: "Адрес доставки: улица, дом, квартира",
+    clear: "Очистить", send: "Отправить в WhatsApp", add: "В заказ +", dec: "Убрать одну", inc: "Добавить ещё", size: "Размер",
+    cm: "см", som: "сом", cats: {"rolls": "Роллы", "baked": "Запечённые", "hot": "Горячие", "pizza": "Пицца", "shawa": "Шаурма", "soups": "Супы", "pasta": "Паста и гриль", "burgers": "Бургеры и снеки", "wings": "Крылышки"},
     count: n => `${n} ${plural(n)} в заказе`,
-    msg: (lines, total, addr) => `Здравствуйте! Хочу сделать заказ в «Суши Пара»:\n\n${lines}\n\nИтого: ${total} сом\n\nАдрес доставки: ${addr}`
+    msg: (lines, total, addr) => `Здравствуйте! Хочу сделать заказ в SUSHI PARA:\n\n${lines}\n\nИтого: ${total} сом\n\nАдрес доставки: ${addr}`
   },
   ky: {
-    title: 'Суши Пара — роллдор жана шаурма · Баткен',
-    meta: 'Суши Пара: классикалык, бышырылган жана ысык роллдор, шаурма. Буйрутма WhatsApp аркылуу: 0557 55 70 85. Нургазиев көч., 102.',
-    nav_aria: 'Бөлүмдөр', nav_menu: 'Меню', nav_contacts: 'Байланыш',
-    eyebrow: 'Роллдор · Шаурма · Баткен',
-    h1: 'Бөлүшкүңүз<br>келген <span>даам</span>',
-    lead: 'Кол менен жасалган классикалык, меште бышырылган жана ысык роллдор, ширелүү шаурма — буйрутмаңыздан кийин дароо даярдайбыз.',
-    cta_order: 'Буйрутма берүү', logo_alt: 'Суши Пара логотиби',
-    menu_p: 'Тамактарды тандаңыз — себет сумманы эсептеп, буйрутманы WhatsApp\'ка жөнөтөт. Жеткирип беребиз же өзүңүз алып кетсеңиз болот.', tabs_aria: 'Менюнун бөлүмдөрү',
-    f_phone: 'Телефон', f_wa: 'WhatsApp\'ка жазуу', f_addr_l: 'Дарек', f_addr: 'Нургазиев көч., 102',
-    f_hours_l: 'Иш убактысы', f_hours: 'Саат 9:00дөн 01:00гө чейин',
-    cart_aria: 'Себет', addr: 'Жеткирүү дареги', addr_ph: 'Жеткирүү дареги: көчө, үй, батир',
-    clear: 'Тазалоо', send: 'WhatsApp\'ка жөнөтүү', add: 'Буйрутмага +', dec: 'Бирөөнү алып салуу', inc: 'Дагы бирди кошуу',
-    cats: { rolls: 'Роллдор', baked: 'Бышырылган', hot: 'Ысык', shawa: 'Шаурма', soups: 'Шорполор', pasta: 'Паста жана гриль', burgers: 'Бургерлер жана снектер', wings: 'Канатчалар' },
+    title: "SUSHI PARA — роллдор, пицца жана шаурма · Баткен", meta: "SUSHI PARA: роллдор, пицца, шаурма, бургерлер жана канатчалар. Буйрутма WhatsApp аркылуу: 0557 55 70 85. Нургазиев көч., 102.",
+    nav_aria: "Бөлүмдөр", nav_menu: "Меню", nav_contacts: "Байланыш", eyebrow: "Роллдор · Пицца · Шаурма · Баткен", h1: "Бөлүшкүңүз<br>келген <span>даам</span>",
+    lead: "Кол менен жасалган классикалык, меште бышырылган жана ысык роллдор, пицца, ширелүү шаурма — буйрутмаңыздан кийин дароо даярдайбыз.",
+    cta_order: "Буйрутма берүү", logo_alt: "SUSHI PARA логотиби", menu_p: "Тамактарды тандаңыз — себет сумманы эсептеп, буйрутманы WhatsApp'ка жөнөтөт. Жеткирип беребиз же өзүңүз алып кетсеңиз болот.",
+    tabs_aria: "Менюнун бөлүмдөрү", f_phone: "Телефон", f_wa: "WhatsApp'ка жазуу", f_addr_l: "Дарек", f_addr: "Нургазиев көч., 102",
+    f_hours_l: "Иш убактысы", f_hours: "Саат 9:00дөн 01:00гө чейин", cart_aria: "Себет", addr: "Жеткирүү дареги", addr_ph: "Жеткирүү дареги: көчө, үй, батир",
+    clear: "Тазалоо", send: "WhatsApp'ка жөнөтүү", add: "Буйрутмага +", dec: "Бирөөнү алып салуу", inc: "Дагы бирди кошуу", size: "Өлчөмү",
+    cm: "см", som: "сом", cats: {"rolls": "Роллдор", "baked": "Бышырылган", "hot": "Ысык", "pizza": "Пицца", "shawa": "Шаурма", "soups": "Шорполор", "pasta": "Паста жана гриль", "burgers": "Бургерлер жана снектер", "wings": "Канатчалар"},
     count: n => `Буйрутмада ${n} тамак`,
-    msg: (lines, total, addr) => `Саламатсызбы! «Суши Пара» ресторанынан буйрутма бергим келет:\n\n${lines}\n\nЖалпы суммасы: ${total} сом\n\nЖеткирүү дареги: ${addr}`
+    msg: (lines, total, addr) => `Саламатсызбы! SUSHI PARA ресторанынан буйрутма бергим келет:\n\n${lines}\n\nЖалпы суммасы: ${total} сом\n\nЖеткирүү дареги: ${addr}`
+  },
+  en: {
+    title: "SUSHI PARA — sushi rolls, pizza & shawarma · Batken", meta: "SUSHI PARA: sushi rolls, pizza, shawarma, burgers and wings in Batken. Order via WhatsApp: 0557 55 70 85. 102 Nurgaziev St.",
+    nav_aria: "Sections", nav_menu: "Menu", nav_contacts: "Contacts", eyebrow: "Rolls · Pizza · Shawarma · Batken", h1: "A taste worth<br><span>sharing</span>",
+    lead: "Handmade classic, baked and hot rolls, pizza and juicy shawarma — cooked fresh as soon as you order.", cta_order: "Order now",
+    logo_alt: "SUSHI PARA logo", menu_p: "Pick your dishes — the cart adds up the total and sends your order via WhatsApp. Delivery or pickup.",
+    tabs_aria: "Menu sections", f_phone: "Phone", f_wa: "Message us on WhatsApp", f_addr_l: "Address", f_addr: "102 Nurgaziev St.",
+    f_hours_l: "Opening hours", f_hours: "9:00 AM – 1:00 AM", cart_aria: "Cart", addr: "Delivery address", addr_ph: "Delivery address: street, building, apartment",
+    clear: "Clear", send: "Send via WhatsApp", add: "Add +", dec: "Remove one", inc: "Add one more", size: "Size", cm: "cm", som: "som",
+    cats: {"rolls": "Rolls", "baked": "Baked rolls", "hot": "Hot rolls", "pizza": "Pizza", "shawa": "Shawarma", "soups": "Soups", "pasta": "Pasta & grill", "burgers": "Burgers & snacks", "wings": "Wings"},
+    count: n => `${n} ${n === 1 ? 'item' : 'items'} in your order`,
+    msg: (lines, total, addr) => `Hello! I would like to place an order at SUSHI PARA:\n\n${lines}\n\nTotal: ${total} som\n\nDelivery address: ${addr}`
   }
 };
 // Кыргызские названия и составы блюд (ключ — slug)
@@ -376,14 +403,105 @@ const KY = {
   'wings-20': ['Канатчалар 20 даана', '+ сыр жана сарымсак соусу'],
   'wings-30': ['Канатчалар 30 даана', '+ сыр соусу 2 даана, сарымсак соусу'],
   'wings-50': ['Канатчалар 50 даана', '+ сыр соусу 2 даана, сарымсак соусу 2 даана'],
-  'wings-100': ['Канатчалар 100 даана', '+ сыр соусу 3 даана, сарымсак соусу']
+  'wings-100': ['Канатчалар 100 даана', '+ сыр соусу 3 даана, сарымсак соусу'],
+  "pizza-pepperoni": ["Пеперони пиццасы", "Соус, сыр, колбаса"],
+  "pizza-pepperoni-double": ["Кош пеперони пиццасы", "Соус, сыр, колбаса"],
+  "pizza-margherita": ["Маргарита пиццасы", "Соус, помидор, сыр"],
+  "pizza-cheese": ["Сырдуу пицца", "Сыр соусу, чеддер, сыр"],
+  "pizza-four-cheese": ["Төрт сыр пиццасы", "Томат соусу, моцарелла, чеддер, пармезан, сыр соусу"],
+  "pizza-chicken-veg": ["Тоок эти жана жашылча менен пицца", "Соус, тоок эти, помидор, сыр"],
+  "pizza-chicken-mushroom": ["Тоок эти жана козу карын менен пицца", "Соус, тоок эти, козу карын, сыр"],
+  "pizza-chicken": ["Чиккен пиццасы", "Томат соусу, моцарелла, тоок эти, помидор, кызыл пияз"],
+  "pizza-hawaiian": ["Гавайи пиццасы", "Соус, тоок эти, ананас, сыр"],
+  "pizza-caesar": ["Цезарь пиццасы", "Цезарь соусу, моцарелла, тоок эти, пармезан, помидор, капуста"],
+  "pizza-meat": ["Эттүү пицца", "Соус, фарш, колбаса, сыр"],
+  "pizza-meat-veg": ["Эт жана жашылча менен пицца", "Соус, фарш, туздалган бадыраң, сыр, зайтун, кызыл пияз"],
+  "pizza-bavarian": ["Бавария пиццасы", "Соус, колбаса, туздалган бадыраң, сыр, кызыл пияз"],
+  "pizza-diablo": ["Диабло пиццасы", "Томат соусу, моцарелла, пеперони, халапеньо калемпири"],
+  "pizza-mexican": ["Мексика пиццасы", "Томат соусу, чили соусу, сыр, пеперони, жүгөрү, зайтун, халапеньо, болгар калемпири"],
+  "pizza-burger": ["Бургер пиццасы", "Горчица соусу, сыр, фарш, болгар калемпири, помидор, туздалган бадыраң, кетчуп, капуста"],
+  "pizza-greek": ["Грек пиццасы", "Томат соусу, сыр, помидор, зайтун, болгар калемпири, фета сыры"],
+  "pizza-assorti": ["Ассорти пиццасы", "Томат соусу, сыр, тоок эти, фарш, болгар калемпири, помидор, туздалган бадыраң"],
+  "pizza-mix": ["Микс пиццасы", "Жарымы сырдуу (сыр соусу, моцарелла, чеддер), жарымы эттүү (соус, помидор, фарш, колбаса)"],
+  "pizza-four-seasons": ["Төрт мезгил пиццасы", "Төрт бөлүк: пеперони, эттүү, тоок эти менен козу карын, сырдуу"]
+};
+// Английские названия и составы блюд (ключ — slug)
+const EN = {
+  "philadelphia": ["Philadelphia", "Rice, cheese, salmon"],
+  "philadelphia-cucumber": ["Philadelphia with cucumber", "Rice, cheese, cucumber, salmon"],
+  "canada": ["Canada", "Rice, cheese, salmon, cucumber, eel"],
+  "california": ["California", "Rice, crab, cucumber, tobiko"],
+  "opalenny": ["Flame-seared roll", "Rice, cheese, cucumber, salmon"],
+  "caesar-big": ["Caesar BIG", "Rice, Caesar sauce, tomato, cucumber, chicken"],
+  "hulk": ["Hulk", "Rice, cheese, tomato, chicken, cucumber"],
+  "panda": ["Panda", "Rice, chicken, cheese, cucumber, sesame"],
+  "sushi-sandwich": ["Sushi sandwich", "Rice, cheese, tomato, cucumber, chicken"],
+  "cucumber-maki": ["Cucumber roll", "Rice, cucumber"],
+  "baked-salmon": ["Baked salmon roll", "Rice, cheese, salmon"],
+  "baked-california": ["Baked California", "Rice, cheese, crab sticks, cucumber, masago"],
+  "hawaiian-baked": ["Baked Hawaiian", "Rice, cheese, chicken, pineapple"],
+  "caesar-baked": ["Baked Caesar", "Rice, Caesar sauce, chicken, tomato, cucumber, cabbage"],
+  "hot-furai": ["Hot Furai", "Rice, cheese, salmon, eel"],
+  "hot-salmon": ["Hot salmon roll", "Rice, cheese, salmon"],
+  "hot-chuk": ["Hot Chak", "Rice, cheese"],
+  "caesar-hot": ["Hot Caesar", "Rice, Caesar sauce, chicken, tomato, cabbage"],
+  "hot-california": ["Hot California", "Rice, cheese, crab, cucumber"],
+  "chicken-tempura": ["Chicken tempura", "Rice, cucumber, chicken"],
+  "shawarma-mini": ["Shawarma mini", "Signature, with beef"],
+  "shawarma-standard": ["Shawarma standard", "Signature, with beef"],
+  "shawarma-baked": ["Baked shawarma", "Signature, with beef"],
+  "chicken-shawarma-mini": ["Chicken shawarma mini", "With chicken"],
+  "chicken-shawarma-standard": ["Chicken shawarma standard", "With chicken"],
+  "chicken-shawarma-spicy": ["Spicy chicken shawarma", "With chicken and jalapeño"],
+  "chicken-shawarma-cheese": ["Cheesy chicken shawarma", "With chicken and cheese sauce"],
+  "ramen-chicken": ["Chicken ramen", "Noodles in broth, chicken, egg"],
+  "ramen-beef": ["Beef ramen", "Noodles in broth, beef, egg"],
+  "tom-yam": ["Tom yum soup", "Spicy Thai soup"],
+  "tom-yam-seafood": ["Seafood tom yum", "Spicy Thai soup with seafood"],
+  "fettuccine-salmon": ["Fettuccine with salmon", "Pasta in cream sauce, salmon"],
+  "fettuccine-chicken-mushroom": ["Fettuccine with chicken and mushrooms", "Pasta in cream sauce, chicken, mushrooms"],
+  "carbonara-chicken": ["Chicken carbonara", "Pasta, chicken, cream sauce, cheese"],
+  "carbonara-hunter": ["Hunter's carbonara", "Pasta, smoked hunter's sausages, cream sauce"],
+  "grilled-chicken": ["Grilled chicken", "Served with fries and sauce"],
+  "burger-beef": ["Signature beef burger", "Beef patty, vegetables, sauce"],
+  "burger-chicken": ["Signature chicken burger", "Crispy chicken fillet, vegetables, sauce"],
+  "burger-beef-cheese": ["Signature beef & cheese burger", "Beef patty, cheese, vegetables, sauce"],
+  "fries": ["French fries", "With ketchup"],
+  "nuggets": ["Nuggets", "With sauce"],
+  "wings-5": ["Wings, 5 pcs", "+ cheese sauce"],
+  "wings-10": ["Wings, 10 pcs", "+ cheese and garlic sauce"],
+  "wings-20": ["Wings, 20 pcs", "+ cheese and garlic sauce"],
+  "wings-30": ["Wings, 30 pcs", "+ 2 cheese sauces, garlic sauce"],
+  "wings-50": ["Wings, 50 pcs", "+ 2 cheese sauces, 2 garlic sauces"],
+  "wings-100": ["Wings, 100 pcs", "+ 3 cheese sauces, garlic sauce"],
+  "pizza-pepperoni": ["Pepperoni pizza", "Sauce, cheese, sausage"],
+  "pizza-pepperoni-double": ["Double pepperoni pizza", "Sauce, cheese, sausage"],
+  "pizza-margherita": ["Margherita pizza", "Sauce, tomato, cheese"],
+  "pizza-cheese": ["Cheese pizza", "Cheese sauce, cheddar, cheese"],
+  "pizza-four-cheese": ["Four cheese pizza", "Tomato sauce, mozzarella, cheddar, parmesan, cheese sauce"],
+  "pizza-chicken-veg": ["Chicken & vegetable pizza", "Sauce, chicken, tomato, cheese"],
+  "pizza-chicken-mushroom": ["Chicken & mushroom pizza", "Sauce, chicken, mushrooms, cheese"],
+  "pizza-chicken": ["Chicken pizza", "Tomato sauce, mozzarella, chicken, tomato, red onion"],
+  "pizza-hawaiian": ["Hawaiian pizza", "Sauce, chicken, pineapple, cheese"],
+  "pizza-caesar": ["Caesar pizza", "Caesar sauce, mozzarella, chicken, parmesan, tomato, cabbage"],
+  "pizza-meat": ["Meat pizza", "Sauce, minced meat, sausage, cheese"],
+  "pizza-meat-veg": ["Meat & vegetable pizza", "Sauce, minced meat, pickles, cheese, olives, red onion"],
+  "pizza-bavarian": ["Bavarian pizza", "Sauce, sausage, pickles, cheese, red onion"],
+  "pizza-diablo": ["Diablo pizza", "Tomato sauce, mozzarella, pepperoni, jalapeño"],
+  "pizza-mexican": ["Mexican pizza", "Tomato sauce, chili sauce, cheese, pepperoni, corn, olives, jalapeño, bell pepper"],
+  "pizza-burger": ["Burger pizza", "Mustard sauce, cheese, minced meat, bell pepper, tomato, pickles, ketchup, cabbage"],
+  "pizza-greek": ["Greek pizza", "Tomato sauce, cheese, tomato, olives, bell pepper, feta"],
+  "pizza-assorti": ["Assorted pizza", "Tomato sauce, cheese, chicken, minced meat, bell pepper, tomato, pickles"],
+  "pizza-mix": ["Mix pizza", "Half cheese (cheese sauce, mozzarella, cheddar), half meat (sauce, tomato, minced meat, sausage)"],
+  "pizza-four-seasons": ["Four seasons pizza", "Four quarters: pepperoni, meat, chicken & mushroom, cheese"]
 };
 let lang = 'ky'; // язык по умолчанию — кыргызский
 try { lang = localStorage.getItem('sp-lang') || 'ky'; } catch (e) {}
 if (!T[lang]) lang = 'ky';
 const t = k => T[lang][k];
-const nm = it => lang === 'ky' ? KY[it.slug][0] : it.name;
-const ds = it => lang === 'ky' ? KY[it.slug][1] : it.desc;
+const LOC = { ky: KY, en: EN };
+const nm = it => (LOC[lang] && LOC[lang][it.slug] ? LOC[lang][it.slug][0] : it.name);
+const ds = it => (LOC[lang] && LOC[lang][it.slug] ? LOC[lang][it.slug][1] : it.desc);
 function applyLang() {
   document.documentElement.lang = lang;
   document.title = t('title');
@@ -399,20 +517,38 @@ function renderTabs() {
   document.getElementById('tabs').innerHTML = MENU.map(c =>
     `<a class="tab" href="#cat-${c.id}" data-jump="${c.id}"${c.id === tab ? ' aria-current="true"' : ''}>${t('cats')[c.id]}<span class="n">${c.items.length}</span></a>`).join('');
 }
-const ctlHTML = (it, q) => q
-  ? `<div class="stepper"><button aria-label="${t('dec')}" data-dec="${it.slug}">−</button><span>${q}</span><button class="plus" aria-label="${t('inc')}" data-inc="${it.slug}">+</button></div>`
-  : `<button class="btn add" data-inc="${it.slug}">${t('add')}</button>`;
+// Пицца продаётся размерами: ключ в корзине — "slug@размер", у остальных блюд — просто slug
+const sel = {};
+function curSize(it) {
+  if (sel[it.slug]) return sel[it.slug];
+  const inCart = it.sizes.find(([sz]) => cart[`${it.slug}@${sz}`]);
+  return (sel[it.slug] = (inCart || it.sizes[0])[0]);
+}
+const keyOf = it => it.sizes ? `${it.slug}@${curSize(it)}` : it.slug;
+const priceOf = it => it.sizes ? it.sizes.find(([sz]) => sz === curSize(it))[1] : it.price;
+const qtyAll = it => it.sizes ? it.sizes.reduce((a, [sz]) => a + (cart[`${it.slug}@${sz}`] || 0), 0) : (cart[it.slug] || 0);
+const sizesHTML = it => `<div class="sizes" role="group" aria-label="${t('size')}">${it.sizes.map(([sz]) => {
+  const q = cart[`${it.slug}@${sz}`] || 0;
+  return `<button type="button" data-size="${it.slug}@${sz}" aria-pressed="${sz === curSize(it)}">${sz} ${t('cm')}${q ? `<b class="q">${q}</b>` : ''}</button>`;
+}).join('')}</div>`;
+const ctlHTML = it => {
+  const k = keyOf(it), q = cart[k] || 0;
+  return q
+    ? `<div class="stepper"><button aria-label="${t('dec')}" data-dec="${k}">−</button><span>${q}</span><button class="plus" aria-label="${t('inc')}" data-inc="${k}">+</button></div>`
+    : `<button class="btn add" data-inc="${k}">${t('add')}</button>`;
+};
 function cardHTML(it) {
-  const q = cart[it.slug] || 0;
+  const q = qtyAll(it);
   return `<article class="card" data-card="${it.slug}">
       <div class="ph">
         <img src="assets/images/${it.slug}.webp" alt="${nm(it)}" loading="lazy" onerror="this.outerHTML=ART['${it.kind}']">
         <span class="badge"${q ? '' : ' hidden'}>×${q}</span>
       </div>
       <h4>${nm(it)}</h4><p>${ds(it)}</p>
+      ${it.sizes ? sizesHTML(it) : ''}
       <div class="row">
-        <span class="price">${it.price} <small>сом</small></span>
-        <div class="ctl">${ctlHTML(it, q)}</div>
+        <span class="price"><span class="pv">${priceOf(it)}</span> <small>${t('som')}</small></span>
+        <div class="ctl">${ctlHTML(it)}</div>
       </div></article>`;
 }
 function renderGrid() {
@@ -426,9 +562,10 @@ function renderGrid() {
 function updateCard(slug) {
   const el = document.querySelector(`[data-card="${slug}"]`), it = ALL.find(i => i.slug === slug);
   if (!el || !it) return;
-  const q = cart[slug] || 0, badge = el.querySelector('.badge');
+  const q = qtyAll(it), badge = el.querySelector('.badge');
   if (badge) { badge.hidden = !q; badge.textContent = '×' + q; }
-  el.querySelector('.ctl').innerHTML = ctlHTML(it, q);
+  if (it.sizes) { el.querySelector('.sizes').outerHTML = sizesHTML(it); el.querySelector('.pv').textContent = priceOf(it); }
+  el.querySelector('.ctl').innerHTML = ctlHTML(it);
 }
 // Высота липких панелей -> CSS-переменные; подсветка текущего раздела в ленте при прокрутке
 function setStick() {
@@ -461,20 +598,24 @@ window.addEventListener('scroll', spy, { passive: true });
 window.addEventListener('resize', spy);
 function renderCart() {
   let total = 0, count = 0; const lines = [];
-  ALL.forEach(it => { const q = cart[it.slug] || 0; if (q) { total += q * it.price; count += q; lines.push(`• ${nm(it)} × ${q} — ${q * it.price} сом`); } });
+  ALL.forEach(it => {
+    const variants = it.sizes ? it.sizes.map(([sz, pr]) => [`${it.slug}@${sz}`, pr, `${nm(it)} ${sz} ${t('cm')}`]) : [[it.slug, it.price, nm(it)]];
+    variants.forEach(([k, pr, label]) => { const q = cart[k] || 0; if (q) { total += q * pr; count += q; lines.push(`• ${label} × ${q} — ${q * pr} ${t('som')}`); } });
+  });
   const el = document.getElementById('cart');
   el.classList.toggle('on', count > 0);
-  document.getElementById('cart-total').textContent = fmt(total) + ' сом';
+  document.getElementById('cart-total').textContent = fmt(total) + ' ' + t('som');
   document.getElementById('cart-count').textContent = t('count')(count);
   const msg = t('msg')(lines.join('\n'), total, addrEl.value.trim());
   document.getElementById('cart-wa').href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
 }
-function setQty(slug, q) { if (q > 0) cart[slug] = q; else delete cart[slug]; save(); updateCard(slug); renderCart(); }
+function setQty(key, q) { if (q > 0) cart[key] = q; else delete cart[key]; save(); updateCard(key.split('@')[0]); renderCart(); }
 
 document.addEventListener('click', e => {
-  const b = e.target.closest('[data-jump],[data-inc],[data-dec],[data-lang],#cart-clear');
+  const b = e.target.closest('[data-jump],[data-inc],[data-dec],[data-size],[data-lang],#cart-clear');
   if (!b) return;
   if (b.dataset.jump) { setActiveTab(b.dataset.jump); }
+  else if (b.dataset.size) { const [slug, sz] = b.dataset.size.split('@'); sel[slug] = +sz; updateCard(slug); }
   else if (b.dataset.lang) { lang = b.dataset.lang; try { localStorage.setItem('sp-lang', lang); } catch (e) {} applyLang(); renderTabs(); renderGrid(); renderCart(); spy(); }
   else if (b.dataset.inc) setQty(b.dataset.inc, (cart[b.dataset.inc] || 0) + 1);
   else if (b.dataset.dec) setQty(b.dataset.dec, (cart[b.dataset.dec] || 0) - 1);
